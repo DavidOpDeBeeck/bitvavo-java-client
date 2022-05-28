@@ -36,7 +36,7 @@ to enhance the developer experience.
     * [ ] Withdrawal history
 * Subscriptions
     * [x] Ticker subscription
-    * [ ] Ticker 24 hour subscription
+    * [x] Ticker 24 hour subscription
     * [ ] Account subscription
     * [ ] Candles subscription
     * [ ] Trades subscription
