@@ -37,7 +37,7 @@ to enhance the developer experience.
 * Subscriptions
     * [x] Ticker subscription
     * [x] Ticker 24 hour subscription
-    * [ ] Account subscription
+    * [x] Account subscription
     * [ ] Candles subscription
     * [ ] Trades subscription
     * [ ] Book subscription
