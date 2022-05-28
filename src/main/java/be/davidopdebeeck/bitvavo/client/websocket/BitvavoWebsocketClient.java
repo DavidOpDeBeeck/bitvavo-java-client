@@ -15,6 +15,7 @@ import be.davidopdebeeck.bitvavo.client.api.markets.BitvavoMarketsResponse;
 import be.davidopdebeeck.bitvavo.client.api.subscription.BitvavoChannelSubscriptionRequest;
 import be.davidopdebeeck.bitvavo.client.api.subscription.BitvavoSubscriptionRequest;
 import be.davidopdebeeck.bitvavo.client.api.subscription.ticker.BitvavoTickerSubscriptionResponse;
+import be.davidopdebeeck.bitvavo.client.api.subscription.ticker24h.BitvavoTicker24hSubscriptionResponse;
 import be.davidopdebeeck.bitvavo.client.api.ticker24h.BitvavoTicker24hRequest;
 import be.davidopdebeeck.bitvavo.client.api.ticker24h.BitvavoTicker24hResponse;
 import be.davidopdebeeck.bitvavo.client.api.tickerbook.BitvavoTickerBookRequest;
@@ -139,6 +140,17 @@ public class BitvavoWebsocketClient {
             .build();
 
         websocketEndpoint.subscribe("ticker", subscriptionRequest, createSubscriptionHandler(handler, BitvavoTickerSubscriptionResponse.class));
+    }
+
+    public void ticker24hSubscription(BitvavoMarket market, BitvavoWebsocketResponseHandler<BitvavoTicker24hSubscriptionResponse> handler) {
+        BitvavoSubscriptionRequest subscriptionRequest = new BitvavoSubscriptionRequest.Builder()
+            .withChannels(List.of(new BitvavoChannelSubscriptionRequest.Builder()
+                .withName("ticker24h")
+                .withMarkets(List.of(market))
+                .build()))
+            .build();
+
+        websocketEndpoint.subscribe("ticker24h", subscriptionRequest, createSubscriptionHandler(handler, BitvavoTicker24hSubscriptionResponse.class));
     }
 
     private <T> BitvavoWebsocketHandler<T> createOneTimeUseHandler(BitvavoWebsocketResponseHandler<T> handler, Class<T> responseClass) {
