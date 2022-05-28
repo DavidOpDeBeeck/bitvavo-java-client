@@ -4,6 +4,32 @@ This a java client for the API that Bitvavo provides. Bitvavo also provides an A
 find [here](https://github.com/bitvavo/java-bitvavo-api), but this client provides specific request and response classes
 to enhance the developer experience.
 
+### Example
+
+```java
+import be.davidopdebeeck.bitvavo.client.BitvavoClient;
+import be.davidopdebeeck.bitvavo.client.BitvavoClientConfiguration;
+import be.davidopdebeeck.bitvavo.client.http.BitvavoHttpClient;
+
+public class Example {
+
+    public static void main(String[] args) {
+        BitvavoClientConfiguration configuration = new BitvavoClientConfiguration.Builder()
+            .withApiKey("<apiKey>")
+            .withApiSecret("<apiSecret>>")
+            .withRestUrl("https://api.bitvavo.com/v2/")
+            .withWsUrl("wss://ws.bitvavo.com/v2/")
+            .withAccessWindow(10000)
+            .build();
+
+        BitvavoClient client = new BitvavoClient(configuration);
+        BitvavoHttpClient httpClient = client.httpClient();
+
+        System.out.println(httpClient.time().asType().getTime());
+    }
+}
+```
+
 ### Endpoints
 
 * General
