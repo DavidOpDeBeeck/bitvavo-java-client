@@ -1,27 +1,28 @@
 package be.davidopdebeeck.bitvavo.client.websocket.handler;
 
 import be.davidopdebeeck.bitvavo.client.websocket.response.BitvavoWebsocketResponse;
+import be.davidopdebeeck.bitvavo.client.websocket.response.BitvavoWebsocketResponseHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static java.util.Objects.requireNonNull;
 
-public class BitvavoWebsocketHandler<T> {
+public class BitvavoWebsocketEventHandler<T> {
 
     private final boolean oneTimeUse;
     private final Class<T> responseClass;
     private final ObjectMapper objectMapper;
     private final BitvavoWebsocketResponseHandler<T> responseHandler;
 
-    private BitvavoWebsocketHandler(Builder<T> builder) {
+    private BitvavoWebsocketEventHandler(Builder<T> builder) {
         oneTimeUse = requireNonNull(builder.oneTimeUse);
         responseClass = requireNonNull(builder.responseClass);
         objectMapper = requireNonNull(builder.objectMapper);
         responseHandler = requireNonNull(builder.responseHandler);
     }
 
-    public void handle(String response) {
+    public void handle(String responseAsString) {
         responseHandler.handle(new BitvavoWebsocketResponse.Builder<>(responseClass)
-            .withResponse(response)
+            .withResponse(responseAsString)
             .withObjectMapper(objectMapper)
             .build());
     }
@@ -56,8 +57,8 @@ public class BitvavoWebsocketHandler<T> {
             return this;
         }
 
-        public BitvavoWebsocketHandler<T> build() {
-            return new BitvavoWebsocketHandler<>(this);
+        public BitvavoWebsocketEventHandler<T> build() {
+            return new BitvavoWebsocketEventHandler<>(this);
         }
     }
 }

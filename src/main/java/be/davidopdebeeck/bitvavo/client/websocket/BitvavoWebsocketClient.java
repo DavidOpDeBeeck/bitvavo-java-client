@@ -25,10 +25,10 @@ import be.davidopdebeeck.bitvavo.client.api.tickerbook.BitvavoTickerBookResponse
 import be.davidopdebeeck.bitvavo.client.api.tickerprice.BitvavoTickerPriceRequest;
 import be.davidopdebeeck.bitvavo.client.api.tickerprice.BitvavoTickerPriceResponse;
 import be.davidopdebeeck.bitvavo.client.api.time.BitvavoTimeResponse;
-import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketHandler;
-import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketResponseHandler;
+import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketEventHandler;
 import be.davidopdebeeck.bitvavo.client.websocket.request.BitvavoWebsocketMarketRequest;
 import be.davidopdebeeck.bitvavo.client.websocket.request.BitvavoWebsocketRequest;
+import be.davidopdebeeck.bitvavo.client.websocket.response.BitvavoWebsocketResponseHandler;
 
 import java.util.List;
 
@@ -251,16 +251,16 @@ public class BitvavoWebsocketClient {
             .build();
     }
 
-    private <T> BitvavoWebsocketHandler<T> createOneTimeUseHandler(BitvavoWebsocketResponseHandler<T> handler, Class<T> responseClass) {
-        return new BitvavoWebsocketHandler.Builder<>(responseClass)
+    private <T> BitvavoWebsocketEventHandler<T> createOneTimeUseHandler(BitvavoWebsocketResponseHandler<T> handler, Class<T> responseClass) {
+        return new BitvavoWebsocketEventHandler.Builder<>(responseClass)
             .withOneTimeUse(true)
             .withObjectMapper(configuration.getObjectMapper())
             .withResponseHandler(handler)
             .build();
     }
 
-    private <T> BitvavoWebsocketHandler<T> createSubscriptionHandler(BitvavoWebsocketResponseHandler<T> handler, Class<T> responseClass) {
-        return new BitvavoWebsocketHandler.Builder<>(responseClass)
+    private <T> BitvavoWebsocketEventHandler<T> createSubscriptionHandler(BitvavoWebsocketResponseHandler<T> handler, Class<T> responseClass) {
+        return new BitvavoWebsocketEventHandler.Builder<>(responseClass)
             .withOneTimeUse(false)
             .withObjectMapper(configuration.getObjectMapper())
             .withResponseHandler(handler)

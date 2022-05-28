@@ -3,8 +3,8 @@ package be.davidopdebeeck.bitvavo.client.websocket;
 import be.davidopdebeeck.bitvavo.client.BitvavoClientConfiguration;
 import be.davidopdebeeck.bitvavo.client.api.authenticate.BitvavoAuthenticateRequest;
 import be.davidopdebeeck.bitvavo.client.api.authenticate.BitvavoAuthenticateResponse;
-import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketHandler;
-import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketHandlerRegistry;
+import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketEventHandler;
+import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketEventHandlerRegistry;
 import be.davidopdebeeck.bitvavo.client.websocket.request.BitvavoWebsocketRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -22,14 +22,14 @@ public class BitvavoWebsocketEndpoint {
     private static final String AUTHENTICATE = "authenticate";
 
     private final BitvavoClientConfiguration configuration;
-    private final BitvavoWebsocketHandlerRegistry handlerRegistry;
+    private final BitvavoWebsocketEventHandlerRegistry handlerRegistry;
 
     private Session session;
     private boolean authenticated = false;
 
     BitvavoWebsocketEndpoint(BitvavoClientConfiguration configuration) {
         this.configuration = requireNonNull(configuration);
-        this.handlerRegistry = new BitvavoWebsocketHandlerRegistry();
+        this.handlerRegistry = new BitvavoWebsocketEventHandlerRegistry();
     }
 
     @OnOpen
@@ -46,14 +46,14 @@ public class BitvavoWebsocketEndpoint {
         JsonNode eventNode = responseNode.get("event");
         if (eventNode != null) {
             String eventName = eventNode.asText();
-            handlerRegistry.findHandlerChainBy(eventName).handle(response);
+            handlerRegistry.findEventHandlerChainBy(eventName).handle(response);
         }
 
         JsonNode actionNode = responseNode.get("action");
         if (actionNode != null) {
             String actionName = actionNode.asText();
             String nestedResponse = responseNode.get("response").toString();
-            handlerRegistry.findHandlerChainBy(actionName).handle(nestedResponse);
+            handlerRegistry.findEventHandlerChainBy(actionName).handle(nestedResponse);
         }
     }
 
@@ -62,11 +62,11 @@ public class BitvavoWebsocketEndpoint {
         t.printStackTrace();
     }
 
-    public <T> void subscribe(String subscription, BitvavoWebsocketHandler<T> handler) {
+    public <T> void subscribe(String subscription, BitvavoWebsocketEventHandler<T> handler) {
         subscribe(subscription, null, handler);
     }
 
-    public <T> void subscribe(String subscription, Object request, BitvavoWebsocketHandler<T> handler) {
+    public <T> void subscribe(String subscription, Object request, BitvavoWebsocketEventHandler<T> handler) {
         handlerRegistry.registerHandler(subscription, handler);
         doRequest(new BitvavoWebsocketRequest.Builder()
             .withAction("subscribe")
@@ -86,7 +86,7 @@ public class BitvavoWebsocketEndpoint {
         }
     }
 
-    public void registerHandler(String eventName, BitvavoWebsocketHandler<?> handler) {
+    public void registerHandler(String eventName, BitvavoWebsocketEventHandler<?> handler) {
         handlerRegistry.registerHandler(eventName, handler);
     }
 
@@ -107,7 +107,7 @@ public class BitvavoWebsocketEndpoint {
             .withWindow(valueOf(configuration.getAccessWindow()))
             .build();
 
-        registerHandler(AUTHENTICATE, new BitvavoWebsocketHandler.Builder<>(BitvavoAuthenticateResponse.class)
+        registerHandler(AUTHENTICATE, new BitvavoWebsocketEventHandler.Builder<>(BitvavoAuthenticateResponse.class)
             .withOneTimeUse(true)
             .withObjectMapper(configuration.getObjectMapper())
             .withResponseHandler(response -> authenticated = response.asType().isAuthenticated())
