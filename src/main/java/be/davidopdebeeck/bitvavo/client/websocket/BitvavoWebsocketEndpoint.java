@@ -19,6 +19,8 @@ import static java.util.Objects.requireNonNull;
 @ClientEndpoint
 public class BitvavoWebsocketEndpoint {
 
+    private static final String AUTHENTICATE = "authenticate";
+
     private final BitvavoClientConfiguration configuration;
     private final BitvavoWebsocketHandlerRegistry handlerRegistry;
 
@@ -66,33 +68,26 @@ public class BitvavoWebsocketEndpoint {
 
     public <T> void subscribe(String subscription, Object request, BitvavoWebsocketHandler<T> handler) {
         handlerRegistry.registerHandler(subscription, handler);
-        doRequest("subscribe", request);
+        doRequest(new BitvavoWebsocketRequest.Builder()
+            .withAction("subscribe")
+            .withRequest(request)
+            .build());
     }
 
-    public <T> void action(String action, BitvavoWebsocketHandler<T> handler) {
-        action(action, null, handler);
-    }
-
-    public <T> void action(String action, Object request, BitvavoWebsocketHandler<T> handler) {
-        handlerRegistry.registerHandler(action, handler);
-        doRequest(action, request);
-    }
-
-    private void doRequest(String action, Object request) {
+    public void doRequest(BitvavoWebsocketRequest websocketRequest) {
         try {
             verifyWebsocketIsOpen();
-            verifySessionIsAuthentication(action);
-
-            BitvavoWebsocketRequest websocketRequest = new BitvavoWebsocketRequest.Builder()
-                .withAction(action)
-                .withRequest(request)
-                .build();
+            verifySessionIsAuthentication(websocketRequest.getAction());
 
             String requestAsString = configuration.getObjectMapper().writeValueAsString(websocketRequest);
             this.session.getBasicRemote().sendText(requestAsString);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void registerHandler(String eventName, BitvavoWebsocketHandler<?> handler) {
+        handlerRegistry.registerHandler(eventName, handler);
     }
 
     private JsonNode convertToJsonNode(String response) {
@@ -112,10 +107,15 @@ public class BitvavoWebsocketEndpoint {
             .withWindow(valueOf(configuration.getAccessWindow()))
             .build();
 
-        action("authenticate", request, new BitvavoWebsocketHandler.Builder<>(BitvavoAuthenticateResponse.class)
+        registerHandler(AUTHENTICATE, new BitvavoWebsocketHandler.Builder<>(BitvavoAuthenticateResponse.class)
             .withOneTimeUse(true)
             .withObjectMapper(configuration.getObjectMapper())
             .withResponseHandler(response -> authenticated = response.asType().isAuthenticated())
+            .build());
+
+        doRequest(new BitvavoWebsocketRequest.Builder()
+            .withAction(AUTHENTICATE)
+            .withRequest(request)
             .build());
     }
 

@@ -7,18 +7,18 @@ import static be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocke
 
 public class BitvavoWebsocketHandlerRegistry {
 
-    private final Map<String, BitvavoWebsocketHandlerChain> handlersByMessageType;
+    private final Map<String, BitvavoWebsocketHandlerChain> handlersByEventName;
 
     public BitvavoWebsocketHandlerRegistry() {
-        this.handlersByMessageType = new HashMap<>();
+        this.handlersByEventName = new HashMap<>();
     }
 
-    public <T> void registerHandler(String messageType, BitvavoWebsocketHandler<T> handler) {
-        handlersByMessageType.putIfAbsent(messageType, emptyChain());
-        handlersByMessageType.get(messageType).register(handler);
+    public <T> void registerHandler(String eventName, BitvavoWebsocketHandler<T> handler) {
+        handlersByEventName.putIfAbsent(eventName, emptyChain());
+        handlersByEventName.get(eventName).register(handler);
     }
 
     public BitvavoWebsocketHandlerChain findHandlerChainBy(String eventName) {
-        return handlersByMessageType.getOrDefault(eventName, emptyChain());
+        return handlersByEventName.getOrDefault(eventName, emptyChain());
     }
 }

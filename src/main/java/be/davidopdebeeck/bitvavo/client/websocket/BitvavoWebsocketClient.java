@@ -14,6 +14,8 @@ import be.davidopdebeeck.bitvavo.client.api.markets.BitvavoMarketsRequest;
 import be.davidopdebeeck.bitvavo.client.api.markets.BitvavoMarketsResponse;
 import be.davidopdebeeck.bitvavo.client.api.subscription.BitvavoChannelSubscriptionRequest;
 import be.davidopdebeeck.bitvavo.client.api.subscription.BitvavoSubscriptionRequest;
+import be.davidopdebeeck.bitvavo.client.api.subscription.account.BitvavoAccountFillSubscriptionResponse;
+import be.davidopdebeeck.bitvavo.client.api.subscription.account.BitvavoAccountOrderSubscriptionResponse;
 import be.davidopdebeeck.bitvavo.client.api.subscription.ticker.BitvavoTickerSubscriptionResponse;
 import be.davidopdebeeck.bitvavo.client.api.subscription.ticker24h.BitvavoTicker24hSubscriptionResponse;
 import be.davidopdebeeck.bitvavo.client.api.ticker24h.BitvavoTicker24hRequest;
@@ -26,6 +28,7 @@ import be.davidopdebeeck.bitvavo.client.api.time.BitvavoTimeResponse;
 import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketHandler;
 import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketResponseHandler;
 import be.davidopdebeeck.bitvavo.client.websocket.request.BitvavoWebsocketMarketRequest;
+import be.davidopdebeeck.bitvavo.client.websocket.request.BitvavoWebsocketRequest;
 
 import java.util.List;
 
@@ -33,6 +36,22 @@ import static be.davidopdebeeck.bitvavo.client.websocket.BitvavoWebsocketEndpoin
 import static java.util.Objects.requireNonNull;
 
 public class BitvavoWebsocketClient {
+
+    private static final String GET_TICKER_24H = "getTicker24h";
+    private static final String GET_TICKER_BOOK = "getTickerBook";
+    private static final String GET_TICKER_PRICE = "getTickerPrice";
+    private static final String GET_CANDLES = "getCandles";
+    private static final String GET_TRADES = "getTrades";
+    private static final String GET_BOOK = "getBook";
+    private static final String GET_ASSETS = "getAssets";
+    private static final String GET_MARKETS = "getMarkets";
+    private static final String GET_TIME = "getTime";
+    private static final String SUBSCRIBE = "subscribe";
+    private static final String TICKER = "ticker";
+    private static final String TICKER_24H = "ticker24h";
+    private static final String ACCOUNT = "account";
+    private static final String ORDER = "order";
+    private static final String FILL = "fill";
 
     private final BitvavoClientConfiguration configuration;
     private final BitvavoWebsocketEndpoint websocketEndpoint;
@@ -43,30 +62,37 @@ public class BitvavoWebsocketClient {
     }
 
     public void time(BitvavoWebsocketResponseHandler<BitvavoTimeResponse> handler) {
-        websocketEndpoint.action("getTime", createOneTimeUseHandler(handler, BitvavoTimeResponse.class));
+        websocketEndpoint.registerHandler(GET_TIME, createOneTimeUseHandler(handler, BitvavoTimeResponse.class));
+        websocketEndpoint.doRequest(createRequest(GET_TIME));
     }
 
     public void markets(BitvavoWebsocketResponseHandler<BitvavoMarketsResponse[]> handler) {
-        websocketEndpoint.action("getMarkets", createOneTimeUseHandler(handler, BitvavoMarketsResponse[].class));
+        websocketEndpoint.registerHandler(GET_MARKETS, createOneTimeUseHandler(handler, BitvavoMarketsResponse[].class));
+        websocketEndpoint.doRequest(createRequest(GET_MARKETS));
     }
 
     public void markets(BitvavoMarketsRequest request, BitvavoWebsocketResponseHandler<BitvavoMarketsResponse> handler) {
-        websocketEndpoint.action("getMarkets", request, createOneTimeUseHandler(handler, BitvavoMarketsResponse.class));
+        websocketEndpoint.registerHandler(GET_MARKETS, createOneTimeUseHandler(handler, BitvavoMarketsResponse.class));
+        websocketEndpoint.doRequest(createRequest(GET_MARKETS, request));
     }
 
     public void assets(BitvavoWebsocketResponseHandler<BitvavoAssetsResponse[]> handler) {
-        websocketEndpoint.action("getAssets", createOneTimeUseHandler(handler, BitvavoAssetsResponse[].class));
+        websocketEndpoint.registerHandler(GET_ASSETS, createOneTimeUseHandler(handler, BitvavoAssetsResponse[].class));
+        websocketEndpoint.doRequest(createRequest(GET_ASSETS));
     }
 
     public void assets(BitvavoAssetsRequest request, BitvavoWebsocketResponseHandler<BitvavoAssetsResponse> handler) {
-        websocketEndpoint.action("getAssets", request, createOneTimeUseHandler(handler, BitvavoAssetsResponse.class));
+        websocketEndpoint.registerHandler(GET_ASSETS, createOneTimeUseHandler(handler, BitvavoAssetsResponse.class));
+        websocketEndpoint.doRequest(createRequest(GET_ASSETS, request));
     }
 
     public void marketBook(BitvavoMarket market, BitvavoWebsocketResponseHandler<BitvavoMarketBookResponse> handler) {
         BitvavoWebsocketMarketRequest marketRequest = new BitvavoWebsocketMarketRequest.Builder()
             .withMarket(market)
             .build();
-        websocketEndpoint.action("getBook", marketRequest, createOneTimeUseHandler(handler, BitvavoMarketBookResponse.class));
+
+        websocketEndpoint.registerHandler(GET_BOOK, createOneTimeUseHandler(handler, BitvavoMarketBookResponse.class));
+        websocketEndpoint.doRequest(createRequest(GET_BOOK, marketRequest));
     }
 
     public void marketBook(BitvavoMarket market, BitvavoMarketBookRequest request, BitvavoWebsocketResponseHandler<BitvavoMarketBookResponse> handler) {
@@ -74,14 +100,18 @@ public class BitvavoWebsocketClient {
             .withMarket(market)
             .withRequest(request)
             .build();
-        websocketEndpoint.action("getBook", marketRequest, createOneTimeUseHandler(handler, BitvavoMarketBookResponse.class));
+
+        websocketEndpoint.registerHandler(GET_BOOK, createOneTimeUseHandler(handler, BitvavoMarketBookResponse.class));
+        websocketEndpoint.doRequest(createRequest(GET_BOOK, marketRequest));
     }
 
     public void marketTrades(BitvavoMarket market, BitvavoWebsocketResponseHandler<BitvavoMarketTradesResponse[]> handler) {
         BitvavoWebsocketMarketRequest marketRequest = new BitvavoWebsocketMarketRequest.Builder()
             .withMarket(market)
             .build();
-        websocketEndpoint.action("getTrades", marketRequest, createOneTimeUseHandler(handler, BitvavoMarketTradesResponse[].class));
+
+        websocketEndpoint.registerHandler(GET_TRADES, createOneTimeUseHandler(handler, BitvavoMarketTradesResponse[].class));
+        websocketEndpoint.doRequest(createRequest(GET_TRADES, marketRequest));
     }
 
     public void marketTrades(BitvavoMarket market, BitvavoMarketTradesRequest request, BitvavoWebsocketResponseHandler<BitvavoMarketTradesResponse[]> handler) {
@@ -89,14 +119,18 @@ public class BitvavoWebsocketClient {
             .withMarket(market)
             .withRequest(request)
             .build();
-        websocketEndpoint.action("getTrades", marketRequest, createOneTimeUseHandler(handler, BitvavoMarketTradesResponse[].class));
+
+        websocketEndpoint.registerHandler(GET_TRADES, createOneTimeUseHandler(handler, BitvavoMarketTradesResponse[].class));
+        websocketEndpoint.doRequest(createRequest(GET_TRADES, marketRequest));
     }
 
     public void marketCandles(BitvavoMarket market, BitvavoWebsocketResponseHandler<BitvavoMarketCandlesResponse[]> handler) {
         BitvavoWebsocketMarketRequest marketRequest = new BitvavoWebsocketMarketRequest.Builder()
             .withMarket(market)
             .build();
-        websocketEndpoint.action("getCandles", marketRequest, createOneTimeUseHandler(handler, BitvavoMarketCandlesResponse[].class));
+
+        websocketEndpoint.registerHandler(GET_CANDLES, createOneTimeUseHandler(handler, BitvavoMarketCandlesResponse[].class));
+        websocketEndpoint.doRequest(createRequest(GET_CANDLES, marketRequest));
     }
 
     public void marketCandles(BitvavoMarket market, BitvavoMarketCandlesRequest request, BitvavoWebsocketResponseHandler<BitvavoMarketCandlesResponse[]> handler) {
@@ -104,53 +138,90 @@ public class BitvavoWebsocketClient {
             .withMarket(market)
             .withRequest(request)
             .build();
-        websocketEndpoint.action("getCandles", marketRequest, createOneTimeUseHandler(handler, BitvavoMarketCandlesResponse[].class));
+
+        websocketEndpoint.registerHandler(GET_CANDLES, createOneTimeUseHandler(handler, BitvavoMarketCandlesResponse[].class));
+        websocketEndpoint.doRequest(createRequest(GET_CANDLES, marketRequest));
     }
 
     public void tickerPrice(BitvavoWebsocketResponseHandler<BitvavoTickerPriceResponse[]> handler) {
-        websocketEndpoint.action("getTickerPrice", createOneTimeUseHandler(handler, BitvavoTickerPriceResponse[].class));
+        websocketEndpoint.registerHandler(GET_TICKER_PRICE, createOneTimeUseHandler(handler, BitvavoTickerPriceResponse[].class));
+        websocketEndpoint.doRequest(createRequest(GET_TICKER_PRICE));
     }
 
     public void tickerPrice(BitvavoTickerPriceRequest request, BitvavoWebsocketResponseHandler<BitvavoTickerPriceResponse> handler) {
-        websocketEndpoint.action("getTickerPrice", request, createOneTimeUseHandler(handler, BitvavoTickerPriceResponse.class));
+        websocketEndpoint.registerHandler(GET_TICKER_PRICE, createOneTimeUseHandler(handler, BitvavoTickerPriceResponse.class));
+        websocketEndpoint.doRequest(createRequest(GET_TICKER_PRICE, request));
     }
 
     public void tickerBook(BitvavoWebsocketResponseHandler<BitvavoTickerBookResponse[]> handler) {
-        websocketEndpoint.action("getTickerBook", createOneTimeUseHandler(handler, BitvavoTickerBookResponse[].class));
+        websocketEndpoint.registerHandler(GET_TICKER_BOOK, createOneTimeUseHandler(handler, BitvavoTickerBookResponse[].class));
+        websocketEndpoint.doRequest(createRequest(GET_TICKER_BOOK));
     }
 
     public void tickerBook(BitvavoTickerBookRequest request, BitvavoWebsocketResponseHandler<BitvavoTickerBookResponse> handler) {
-        websocketEndpoint.action("getTickerBook", request, createOneTimeUseHandler(handler, BitvavoTickerBookResponse.class));
+        websocketEndpoint.registerHandler(GET_TICKER_BOOK, createOneTimeUseHandler(handler, BitvavoTickerBookResponse.class));
+        websocketEndpoint.doRequest(createRequest(GET_TICKER_BOOK, request));
     }
 
     public void ticker24h(BitvavoWebsocketResponseHandler<BitvavoTicker24hResponse[]> handler) {
-        websocketEndpoint.action("getTicker24h", createOneTimeUseHandler(handler, BitvavoTicker24hResponse[].class));
+        websocketEndpoint.registerHandler(GET_TICKER_24H, createOneTimeUseHandler(handler, BitvavoTicker24hResponse[].class));
+        websocketEndpoint.doRequest(createRequest(GET_TICKER_24H));
     }
 
     public void ticker24h(BitvavoTicker24hRequest request, BitvavoWebsocketResponseHandler<BitvavoTicker24hResponse> handler) {
-        websocketEndpoint.action("getTicker24h", request, createOneTimeUseHandler(handler, BitvavoTicker24hResponse.class));
+        websocketEndpoint.registerHandler(GET_TICKER_24H, createOneTimeUseHandler(handler, BitvavoTicker24hResponse.class));
+        websocketEndpoint.doRequest(createRequest(GET_TICKER_24H, request));
     }
 
     public void tickerSubscription(BitvavoMarket market, BitvavoWebsocketResponseHandler<BitvavoTickerSubscriptionResponse> handler) {
         BitvavoSubscriptionRequest subscriptionRequest = new BitvavoSubscriptionRequest.Builder()
             .withChannels(List.of(new BitvavoChannelSubscriptionRequest.Builder()
-                .withName("ticker")
+                .withName(TICKER)
                 .withMarkets(List.of(market))
                 .build()))
             .build();
 
-        websocketEndpoint.subscribe("ticker", subscriptionRequest, createSubscriptionHandler(handler, BitvavoTickerSubscriptionResponse.class));
+        websocketEndpoint.registerHandler(TICKER, createSubscriptionHandler(handler, BitvavoTickerSubscriptionResponse.class));
+        websocketEndpoint.doRequest(createRequest(SUBSCRIBE, subscriptionRequest));
     }
 
     public void ticker24hSubscription(BitvavoMarket market, BitvavoWebsocketResponseHandler<BitvavoTicker24hSubscriptionResponse> handler) {
         BitvavoSubscriptionRequest subscriptionRequest = new BitvavoSubscriptionRequest.Builder()
             .withChannels(List.of(new BitvavoChannelSubscriptionRequest.Builder()
-                .withName("ticker24h")
+                .withName(TICKER_24H)
                 .withMarkets(List.of(market))
                 .build()))
             .build();
 
-        websocketEndpoint.subscribe("ticker24h", subscriptionRequest, createSubscriptionHandler(handler, BitvavoTicker24hSubscriptionResponse.class));
+        websocketEndpoint.registerHandler(TICKER_24H, createSubscriptionHandler(handler, BitvavoTicker24hSubscriptionResponse.class));
+        websocketEndpoint.doRequest(createRequest(SUBSCRIBE, subscriptionRequest));
+    }
+
+    public void accountSubscription(BitvavoMarket market,
+                                    BitvavoWebsocketResponseHandler<BitvavoAccountFillSubscriptionResponse> fillHandler,
+                                    BitvavoWebsocketResponseHandler<BitvavoAccountOrderSubscriptionResponse> orderHandler) {
+        BitvavoSubscriptionRequest subscriptionRequest = new BitvavoSubscriptionRequest.Builder()
+            .withChannels(List.of(new BitvavoChannelSubscriptionRequest.Builder()
+                .withName(ACCOUNT)
+                .withMarkets(List.of(market))
+                .build()))
+            .build();
+
+        websocketEndpoint.registerHandler(FILL, createSubscriptionHandler(fillHandler, BitvavoAccountFillSubscriptionResponse.class));
+        websocketEndpoint.registerHandler(ORDER, createSubscriptionHandler(orderHandler, BitvavoAccountOrderSubscriptionResponse.class));
+
+        websocketEndpoint.doRequest(createRequest(SUBSCRIBE, subscriptionRequest));
+    }
+
+    private BitvavoWebsocketRequest createRequest(String action) {
+        return createRequest(action, null);
+    }
+
+    private BitvavoWebsocketRequest createRequest(String action, Object request) {
+        return new BitvavoWebsocketRequest.Builder()
+            .withAction(action)
+            .withRequest(request)
+            .build();
     }
 
     private <T> BitvavoWebsocketHandler<T> createOneTimeUseHandler(BitvavoWebsocketResponseHandler<T> handler, Class<T> responseClass) {
