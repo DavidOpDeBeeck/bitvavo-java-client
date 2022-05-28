@@ -53,6 +53,8 @@ public class BitvavoWebsocketClient {
     private static final String ORDER = "order";
     private static final String FILL = "fill";
     private static final String BOOK = "book";
+    private static final String TRADES = "trades";
+    private static final String TRADE = "trade";
 
     private final BitvavoClientConfiguration configuration;
     private final BitvavoWebsocketEndpoint websocketEndpoint;
@@ -211,6 +213,18 @@ public class BitvavoWebsocketClient {
         websocketEndpoint.registerHandler(FILL, createSubscriptionHandler(fillHandler, BitvavoAccountFillSubscriptionResponse.class));
         websocketEndpoint.registerHandler(ORDER, createSubscriptionHandler(orderHandler, BitvavoAccountOrderSubscriptionResponse.class));
 
+        websocketEndpoint.doRequest(createRequest(SUBSCRIBE, subscriptionRequest));
+    }
+
+    public void tradesSubscription(BitvavoMarket market, BitvavoWebsocketResponseHandler<BitvavoMarketTradesResponse> handler) {
+        BitvavoSubscriptionRequest subscriptionRequest = new BitvavoSubscriptionRequest.Builder()
+            .withChannels(List.of(new BitvavoChannelSubscriptionRequest.Builder()
+                .withName(TRADES)
+                .withMarkets(List.of(market))
+                .build()))
+            .build();
+
+        websocketEndpoint.registerHandler(TRADE, createSubscriptionHandler(handler, BitvavoMarketTradesResponse.class));
         websocketEndpoint.doRequest(createRequest(SUBSCRIBE, subscriptionRequest));
     }
 

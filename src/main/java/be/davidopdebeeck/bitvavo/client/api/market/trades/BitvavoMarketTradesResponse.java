@@ -6,7 +6,7 @@ import static java.util.Objects.requireNonNull;
 
 public class BitvavoMarketTradesResponse {
 
-    private long time;
+    private long timestamp;
     private String id;
     private BigDecimal amount;
     private BigDecimal price;
@@ -16,15 +16,15 @@ public class BitvavoMarketTradesResponse {
     }
 
     private BitvavoMarketTradesResponse(Builder builder) {
-        time = requireNonNull(builder.time);
+        timestamp = requireNonNull(builder.timestamp);
         id = requireNonNull(builder.id);
         amount = requireNonNull(builder.amount);
         price = requireNonNull(builder.price);
         side = requireNonNull(builder.side);
     }
 
-    public long getTime() {
-        return time;
+    public long getTimestamp() {
+        return timestamp;
     }
 
     public String getId() {
@@ -45,14 +45,14 @@ public class BitvavoMarketTradesResponse {
 
     public static final class Builder {
 
-        private Long time;
+        private Long timestamp;
         private String id;
         private BigDecimal amount;
         private BigDecimal price;
         private String side;
 
-        public Builder withTime(long time) {
-            this.time = time;
+        public Builder withTimestamp(long timestamp) {
+            this.timestamp = timestamp;
             return this;
         }
 

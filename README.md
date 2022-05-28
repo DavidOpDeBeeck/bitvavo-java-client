@@ -39,7 +39,7 @@ to enhance the developer experience.
     * [x] Ticker 24 hour subscription
     * [x] Account subscription
     * [ ] Candles subscription
-    * [ ] Trades subscription
+    * [x] Trades subscription
     * [x] Book subscription
 
 ### Conventions
