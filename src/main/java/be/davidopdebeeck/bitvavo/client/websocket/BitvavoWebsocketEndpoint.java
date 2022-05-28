@@ -8,6 +8,8 @@ import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketEventH
 import be.davidopdebeeck.bitvavo.client.websocket.request.BitvavoWebsocketRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.websocket.*;
 
@@ -18,6 +20,8 @@ import static java.util.Objects.requireNonNull;
 
 @ClientEndpoint
 public class BitvavoWebsocketEndpoint {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BitvavoWebsocketEndpoint.class);
 
     private static final String AUTHENTICATE = "authenticate";
 
@@ -40,7 +44,7 @@ public class BitvavoWebsocketEndpoint {
 
     @OnMessage
     public void processMessage(String response) {
-        System.out.println("processMessage: " + response);
+        LOGGER.debug("Received websocket message: {}", response);
         JsonNode responseNode = convertToJsonNode(response);
 
         JsonNode eventNode = responseNode.get("event");
