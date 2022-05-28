@@ -1,5 +1,8 @@
 package be.davidopdebeeck.bitvavo.client;
 
+import be.davidopdebeeck.bitvavo.client.http.BitvavoHttpClient;
+import be.davidopdebeeck.bitvavo.client.websocket.BitvavoWebsocketClient;
+
 public class BitvavoClient {
 
     private final BitvavoHttpClient httpClient;

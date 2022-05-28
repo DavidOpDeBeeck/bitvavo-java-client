@@ -1,5 +1,6 @@
-package be.davidopdebeeck.bitvavo.client;
+package be.davidopdebeeck.bitvavo.client.websocket;
 
+import be.davidopdebeeck.bitvavo.client.BitvavoClientConfiguration;
 import be.davidopdebeeck.bitvavo.client.api.assets.BitvavoAssetsRequest;
 import be.davidopdebeeck.bitvavo.client.api.assets.BitvavoAssetsResponse;
 import be.davidopdebeeck.bitvavo.client.api.market.BitvavoMarket;
@@ -21,7 +22,6 @@ import be.davidopdebeeck.bitvavo.client.api.tickerbook.BitvavoTickerBookResponse
 import be.davidopdebeeck.bitvavo.client.api.tickerprice.BitvavoTickerPriceRequest;
 import be.davidopdebeeck.bitvavo.client.api.tickerprice.BitvavoTickerPriceResponse;
 import be.davidopdebeeck.bitvavo.client.api.time.BitvavoTimeResponse;
-import be.davidopdebeeck.bitvavo.client.websocket.BitvavoWebsocketEndpoint;
 import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketHandler;
 import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketResponseHandler;
 import be.davidopdebeeck.bitvavo.client.websocket.request.BitvavoWebsocketMarketRequest;

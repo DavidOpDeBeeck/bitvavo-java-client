@@ -1,5 +1,7 @@
-package be.davidopdebeeck.bitvavo.client;
+package be.davidopdebeeck.bitvavo.client.http;
 
+import be.davidopdebeeck.bitvavo.client.BitvavoClientConfiguration;
+import be.davidopdebeeck.bitvavo.client.BitvavoClientException;
 import be.davidopdebeeck.bitvavo.client.api.account.BitvavoAccountResponse;
 import be.davidopdebeeck.bitvavo.client.api.assets.BitvavoAssetsRequest;
 import be.davidopdebeeck.bitvavo.client.api.assets.BitvavoAssetsResponse;
