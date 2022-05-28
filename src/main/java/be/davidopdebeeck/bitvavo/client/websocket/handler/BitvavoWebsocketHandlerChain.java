@@ -3,8 +3,6 @@ package be.davidopdebeeck.bitvavo.client.websocket.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
 public class BitvavoWebsocketHandlerChain {
 
     public static BitvavoWebsocketHandlerChain emptyChain() {
@@ -23,13 +21,6 @@ public class BitvavoWebsocketHandlerChain {
 
     public synchronized void handle(String response) {
         handlers.forEach(handler -> handler.handle(response));
-        removeOneTimeUseHandlers();
-    }
-
-    private void removeOneTimeUseHandlers() {
-        List<BitvavoWebsocketHandler<?>> oneTimeUseHandlers = handlers.stream()
-            .filter(BitvavoWebsocketHandler::isOneTimeUse)
-            .collect(toList());
-        handlers.removeAll(oneTimeUseHandlers);
+        handlers.removeIf(BitvavoWebsocketHandler::isOneTimeUse);
     }
 }
