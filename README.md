@@ -40,7 +40,7 @@ to enhance the developer experience.
     * [x] Account subscription
     * [ ] Candles subscription
     * [ ] Trades subscription
-    * [ ] Book subscription
+    * [x] Book subscription
 
 ### Conventions
 
