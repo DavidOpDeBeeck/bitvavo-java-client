@@ -66,18 +66,6 @@ public class BitvavoWebsocketEndpoint {
         t.printStackTrace();
     }
 
-    public <T> void subscribe(String subscription, BitvavoWebsocketEventHandler<T> handler) {
-        subscribe(subscription, null, handler);
-    }
-
-    public <T> void subscribe(String subscription, Object request, BitvavoWebsocketEventHandler<T> handler) {
-        handlerRegistry.registerHandler(subscription, handler);
-        doRequest(new BitvavoWebsocketRequest.Builder()
-            .withAction("subscribe")
-            .withRequest(request)
-            .build());
-    }
-
     public void doRequest(BitvavoWebsocketRequest websocketRequest) {
         try {
             verifyWebsocketIsOpen();
