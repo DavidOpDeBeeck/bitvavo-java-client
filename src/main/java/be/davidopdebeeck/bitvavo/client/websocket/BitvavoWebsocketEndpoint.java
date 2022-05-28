@@ -3,6 +3,8 @@ package be.davidopdebeeck.bitvavo.client.websocket;
 import be.davidopdebeeck.bitvavo.client.BitvavoClientConfiguration;
 import be.davidopdebeeck.bitvavo.client.api.authenticate.BitvavoAuthenticateRequest;
 import be.davidopdebeeck.bitvavo.client.api.authenticate.BitvavoAuthenticateResponse;
+import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketErrorHandler;
+import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketErrorHandlerRegistry;
 import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketEventHandler;
 import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketEventHandlerRegistry;
 import be.davidopdebeeck.bitvavo.client.websocket.request.BitvavoWebsocketRequest;
@@ -26,14 +28,16 @@ public class BitvavoWebsocketEndpoint {
     private static final String AUTHENTICATE = "authenticate";
 
     private final BitvavoClientConfiguration configuration;
-    private final BitvavoWebsocketEventHandlerRegistry handlerRegistry;
+    private final BitvavoWebsocketEventHandlerRegistry eventHandlerRegistry;
+    private final BitvavoWebsocketErrorHandlerRegistry errorHandlerRegistry;
 
     private Session session;
     private boolean authenticated = false;
 
     BitvavoWebsocketEndpoint(BitvavoClientConfiguration configuration) {
         this.configuration = requireNonNull(configuration);
-        this.handlerRegistry = new BitvavoWebsocketEventHandlerRegistry();
+        this.eventHandlerRegistry = new BitvavoWebsocketEventHandlerRegistry();
+        this.errorHandlerRegistry = new BitvavoWebsocketErrorHandlerRegistry();
     }
 
     @OnOpen
@@ -50,20 +54,21 @@ public class BitvavoWebsocketEndpoint {
         JsonNode eventNode = responseNode.get("event");
         if (eventNode != null) {
             String eventName = eventNode.asText();
-            handlerRegistry.findEventHandlerChainBy(eventName).handle(response);
+            eventHandlerRegistry.findEventHandlerChainBy(eventName).handle(response);
         }
 
         JsonNode actionNode = responseNode.get("action");
         if (actionNode != null) {
             String actionName = actionNode.asText();
             String nestedResponse = responseNode.get("response").toString();
-            handlerRegistry.findEventHandlerChainBy(actionName).handle(nestedResponse);
+            eventHandlerRegistry.findEventHandlerChainBy(actionName).handle(nestedResponse);
         }
     }
 
     @OnError
-    public void processError(Throwable t) {
-        t.printStackTrace();
+    public void processError(Throwable throwable) {
+        errorHandlerRegistry.findErrorHandlers()
+            .forEach(errorHandler -> errorHandler.handle(throwable));
     }
 
     public void doRequest(BitvavoWebsocketRequest websocketRequest) {
@@ -78,8 +83,12 @@ public class BitvavoWebsocketEndpoint {
         }
     }
 
+    public void registerHandler(BitvavoWebsocketErrorHandler handler) {
+        errorHandlerRegistry.registerHandler(handler);
+    }
+
     public void registerHandler(String eventName, BitvavoWebsocketEventHandler<?> handler) {
-        handlerRegistry.registerHandler(eventName, handler);
+        eventHandlerRegistry.registerHandler(eventName, handler);
     }
 
     private JsonNode convertToJsonNode(String response) {

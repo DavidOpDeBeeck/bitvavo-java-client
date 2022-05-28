@@ -25,6 +25,7 @@ import be.davidopdebeeck.bitvavo.client.api.tickerbook.BitvavoTickerBookResponse
 import be.davidopdebeeck.bitvavo.client.api.tickerprice.BitvavoTickerPriceRequest;
 import be.davidopdebeeck.bitvavo.client.api.tickerprice.BitvavoTickerPriceResponse;
 import be.davidopdebeeck.bitvavo.client.api.time.BitvavoTimeResponse;
+import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketErrorHandler;
 import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketEventHandler;
 import be.davidopdebeeck.bitvavo.client.websocket.request.BitvavoWebsocketMarketRequest;
 import be.davidopdebeeck.bitvavo.client.websocket.request.BitvavoWebsocketRequest;
@@ -238,6 +239,10 @@ public class BitvavoWebsocketClient {
 
         websocketEndpoint.registerHandler(BOOK, createSubscriptionHandler(handler, BitvavoMarketBookResponse.class));
         websocketEndpoint.doRequest(createRequest(SUBSCRIBE, subscriptionRequest));
+    }
+
+    public void errorHandler(BitvavoWebsocketErrorHandler handler) {
+        websocketEndpoint.registerHandler(handler);
     }
 
     private BitvavoWebsocketRequest createRequest(String action) {
