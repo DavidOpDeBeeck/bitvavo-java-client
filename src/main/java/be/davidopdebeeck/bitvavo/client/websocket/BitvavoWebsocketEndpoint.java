@@ -3,10 +3,10 @@ package be.davidopdebeeck.bitvavo.client.websocket;
 import be.davidopdebeeck.bitvavo.client.BitvavoClientConfiguration;
 import be.davidopdebeeck.bitvavo.client.api.authenticate.BitvavoAuthenticateRequest;
 import be.davidopdebeeck.bitvavo.client.api.authenticate.BitvavoAuthenticateResponse;
-import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketErrorHandler;
-import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketErrorHandlerRegistry;
-import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketEventHandler;
-import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketEventHandlerRegistry;
+import be.davidopdebeeck.bitvavo.client.websocket.handler.error.BitvavoWebsocketErrorHandler;
+import be.davidopdebeeck.bitvavo.client.websocket.handler.error.BitvavoWebsocketErrorHandlerRegistry;
+import be.davidopdebeeck.bitvavo.client.websocket.handler.event.BitvavoWebsocketEventHandler;
+import be.davidopdebeeck.bitvavo.client.websocket.handler.event.BitvavoWebsocketEventHandlerRegistry;
 import be.davidopdebeeck.bitvavo.client.websocket.request.BitvavoWebsocketRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -51,10 +51,19 @@ public class BitvavoWebsocketEndpoint {
         LOGGER.debug("Received websocket message: {}", response);
         JsonNode responseNode = convertToJsonNode(response);
 
+        JsonNode errorCodeNode = responseNode.get("errorCode");
+        if (errorCodeNode != null) {
+            String errorCode = errorCodeNode.asText();
+            String errorMessage = responseNode.get("error").asText();
+            errorHandlerRegistry.findErrorHandlerChain().handle(errorCode, errorMessage);
+            return;
+        }
+
         JsonNode eventNode = responseNode.get("event");
         if (eventNode != null) {
             String eventName = eventNode.asText();
             eventHandlerRegistry.findEventHandlerChainBy(eventName).handle(response);
+            return;
         }
 
         JsonNode actionNode = responseNode.get("action");
@@ -67,8 +76,7 @@ public class BitvavoWebsocketEndpoint {
 
     @OnError
     public void processError(Throwable throwable) {
-        errorHandlerRegistry.findErrorHandlers()
-            .forEach(errorHandler -> errorHandler.handle(throwable));
+        errorHandlerRegistry.findErrorHandlerChain().handle(throwable);
     }
 
     public void doRequest(BitvavoWebsocketRequest websocketRequest) {

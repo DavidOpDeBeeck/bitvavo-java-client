@@ -1,4 +1,4 @@
-package be.davidopdebeeck.bitvavo.client.websocket.handler;
+package be.davidopdebeeck.bitvavo.client.websocket.handler.event;
 
 import be.davidopdebeeck.bitvavo.client.websocket.response.BitvavoWebsocketResponse;
 import be.davidopdebeeck.bitvavo.client.websocket.response.BitvavoWebsocketResponseHandler;

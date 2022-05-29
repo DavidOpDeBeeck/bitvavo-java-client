@@ -25,8 +25,8 @@ import be.davidopdebeeck.bitvavo.client.api.tickerbook.BitvavoTickerBookResponse
 import be.davidopdebeeck.bitvavo.client.api.tickerprice.BitvavoTickerPriceRequest;
 import be.davidopdebeeck.bitvavo.client.api.tickerprice.BitvavoTickerPriceResponse;
 import be.davidopdebeeck.bitvavo.client.api.time.BitvavoTimeResponse;
-import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketErrorHandler;
-import be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketEventHandler;
+import be.davidopdebeeck.bitvavo.client.websocket.handler.error.BitvavoWebsocketErrorHandler;
+import be.davidopdebeeck.bitvavo.client.websocket.handler.event.BitvavoWebsocketEventHandler;
 import be.davidopdebeeck.bitvavo.client.websocket.request.BitvavoWebsocketMarketRequest;
 import be.davidopdebeeck.bitvavo.client.websocket.request.BitvavoWebsocketRequest;
 import be.davidopdebeeck.bitvavo.client.websocket.response.BitvavoWebsocketResponseHandler;

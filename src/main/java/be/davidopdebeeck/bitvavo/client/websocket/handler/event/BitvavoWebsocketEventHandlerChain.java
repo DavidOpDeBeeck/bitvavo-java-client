@@ -1,4 +1,4 @@
-package be.davidopdebeeck.bitvavo.client.websocket.handler;
+package be.davidopdebeeck.bitvavo.client.websocket.handler.event;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class BitvavoWebsocketEventHandlerChain {
         this.handlers = new ArrayList<>();
     }
 
-    public void register(BitvavoWebsocketEventHandler<?> handler) {
+    void register(BitvavoWebsocketEventHandler<?> handler) {
         this.handlers.add(handler);
     }
 

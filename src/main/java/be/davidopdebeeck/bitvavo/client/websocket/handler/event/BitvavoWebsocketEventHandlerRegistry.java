@@ -1,9 +1,9 @@
-package be.davidopdebeeck.bitvavo.client.websocket.handler;
+package be.davidopdebeeck.bitvavo.client.websocket.handler.event;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static be.davidopdebeeck.bitvavo.client.websocket.handler.BitvavoWebsocketEventHandlerChain.emptyChain;
+import static be.davidopdebeeck.bitvavo.client.websocket.handler.event.BitvavoWebsocketEventHandlerChain.emptyChain;
 
 public class BitvavoWebsocketEventHandlerRegistry {
 
