@@ -11,10 +11,14 @@ import be.davidopdebeeck.bitvavo.client.BitvavoClient;
 import be.davidopdebeeck.bitvavo.client.BitvavoClientConfiguration;
 import be.davidopdebeeck.bitvavo.client.http.BitvavoHttpClient;
 
+import static be.davidopdebeeck.bitvavo.client.api.asset.BitvavoAssetSymbols.BTC;
+import static be.davidopdebeeck.bitvavo.client.api.asset.BitvavoAssetSymbols.EUR;
+import static be.davidopdebeeck.bitvavo.client.api.market.BitvavoMarket.market;
+
 public class Example {
 
-    public static void main(String[] args) {
-        BitvavoClientConfiguration configuration = new BitvavoClientConfiguration.Builder()
+  public static void main(String[] args) {
+    BitvavoClientConfiguration configuration = new BitvavoClientConfiguration.Builder()
             .withApiKey("<apiKey>")
             .withApiSecret("<apiSecret>>")
             .withRestUrl("https://api.bitvavo.com/v2/")
@@ -22,11 +26,12 @@ public class Example {
             .withAccessWindow(10000)
             .build();
 
-        BitvavoClient client = new BitvavoClient(configuration);
-        BitvavoHttpClient httpClient = client.httpClient();
+    BitvavoClient client = new BitvavoClient(configuration);
+    BitvavoHttpClient httpClient = client.httpClient();
 
-        System.out.println(httpClient.time().asType().getTime());
-    }
+    System.out.println(httpClient.time().asType().getTime());
+    System.out.println(httpClient.marketBook(market(BTC, EUR)).asString());
+  }
 }
 ```
 
