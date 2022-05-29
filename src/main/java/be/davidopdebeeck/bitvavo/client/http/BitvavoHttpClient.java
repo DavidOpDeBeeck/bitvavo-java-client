@@ -130,21 +130,13 @@ public class BitvavoHttpClient {
         return doRequest(createGETRequest(uri), BitvavoMarketTradesResponse[].class);
     }
 
-    public BitvavoHttpResponse<BitvavoMarketCandlesResponse[]> marketCandles(BitvavoMarket market) {
-        URI uri = createURI("{market}/candles")
-            .withPathVariable("market", market)
-            .build();
-
-        return doRequest(createGETRequest(uri), BitvavoMarketCandlesResponse[].class);
-    }
-
-    public BitvavoHttpResponse<BitvavoMarketCandlesResponse[]> marketCandles(BitvavoMarket market, BitvavoMarketCandlesRequest request) {
+    public BitvavoHttpResponse<BitvavoMarketCandlesResponse> marketCandles(BitvavoMarket market, BitvavoMarketCandlesRequest request) {
         URI uri = createURI("{market}/candles")
             .withPathVariable("market", market)
             .withQueryParameters(convertToMap(request))
             .build();
 
-        return doRequest(createGETRequest(uri), BitvavoMarketCandlesResponse[].class);
+        return doRequest(createGETRequest(uri), BitvavoMarketCandlesResponse.class);
     }
 
     public BitvavoHttpResponse<BitvavoTickerPriceResponse[]> tickerPrice() {

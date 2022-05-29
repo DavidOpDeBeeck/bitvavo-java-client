@@ -1,16 +1,21 @@
 package be.davidopdebeeck.bitvavo.client.serialization;
 
 import be.davidopdebeeck.bitvavo.client.api.asset.BitvavoAssetSymbol;
+import be.davidopdebeeck.bitvavo.client.api.interval.BitvavoInterval;
 import be.davidopdebeeck.bitvavo.client.api.market.BitvavoMarket;
 import be.davidopdebeeck.bitvavo.client.api.market.book.BitvavoAsk;
 import be.davidopdebeeck.bitvavo.client.api.market.book.BitvavoBid;
+import be.davidopdebeeck.bitvavo.client.api.market.candles.BitvavoCandle;
 import be.davidopdebeeck.bitvavo.client.api.market.candles.BitvavoMarketCandlesResponse;
 import be.davidopdebeeck.bitvavo.client.api.subscription.ticker24h.BitvavoTicker24hSubscriptionResponse;
 import be.davidopdebeeck.bitvavo.client.serialization.asset.BitvavoAssetSymbolDeserializer;
 import be.davidopdebeeck.bitvavo.client.serialization.asset.BitvavoAssetSymbolSerializer;
 import be.davidopdebeeck.bitvavo.client.serialization.book.BitvavoAskDeserializer;
 import be.davidopdebeeck.bitvavo.client.serialization.book.BitvavoBidDeserializer;
-import be.davidopdebeeck.bitvavo.client.serialization.candles.BitvavoCandlesResponseDeserializer;
+import be.davidopdebeeck.bitvavo.client.serialization.candles.BitvavoCandleDeserializer;
+import be.davidopdebeeck.bitvavo.client.serialization.candles.BitvavoMarketCandlesResponseDeserializer;
+import be.davidopdebeeck.bitvavo.client.serialization.interval.BitvavoIntervalDeserializer;
+import be.davidopdebeeck.bitvavo.client.serialization.interval.BitvavoIntervalSerializer;
 import be.davidopdebeeck.bitvavo.client.serialization.market.BitvavoMarketDeserializer;
 import be.davidopdebeeck.bitvavo.client.serialization.market.BitvavoMarketSerializer;
 import be.davidopdebeeck.bitvavo.client.serialization.subscription.BitvavoTicker24hSubscriptionResponseDeserializer;
@@ -47,8 +52,12 @@ public class BitvavoSerializationModule {
             // asset
             .addSerializer(BitvavoAssetSymbol.class, new BitvavoAssetSymbolSerializer())
             .addDeserializer(BitvavoAssetSymbol.class, new BitvavoAssetSymbolDeserializer())
+            // interval
+            .addSerializer(BitvavoInterval.class, new BitvavoIntervalSerializer())
+            .addDeserializer(BitvavoInterval.class, new BitvavoIntervalDeserializer())
             // candles
-            .addDeserializer(BitvavoMarketCandlesResponse.class, new BitvavoCandlesResponseDeserializer())
+            .addDeserializer(BitvavoCandle.class, new BitvavoCandleDeserializer())
+            .addDeserializer(BitvavoMarketCandlesResponse.class, new BitvavoMarketCandlesResponseDeserializer())
             // subscription
             .addDeserializer(BitvavoTicker24hSubscriptionResponse.class, new BitvavoTicker24hSubscriptionResponseDeserializer())
             ;

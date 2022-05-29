@@ -81,7 +81,7 @@ public class Example {
     * [x] Ticker subscription
     * [x] Ticker 24 hour subscription
     * [x] Account subscription
-    * [ ] Candles subscription
+    * [x] Candles subscription
     * [x] Trades subscription
     * [x] Book subscription
 

@@ -1,5 +1,7 @@
 package be.davidopdebeeck.bitvavo.client.api.market.candles;
 
+import be.davidopdebeeck.bitvavo.client.api.interval.BitvavoInterval;
+
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -7,7 +9,7 @@ import static java.util.Optional.ofNullable;
 
 public class BitvavoMarketCandlesRequest {
 
-    private final String interval;
+    private final BitvavoInterval interval;
     private final Integer limit;
     private final Long start;
     private final Long end;
@@ -19,7 +21,7 @@ public class BitvavoMarketCandlesRequest {
         end = builder.end;
     }
 
-    public String getInterval() {
+    public BitvavoInterval getInterval() {
         return interval;
     }
 
@@ -37,12 +39,12 @@ public class BitvavoMarketCandlesRequest {
 
     public static final class Builder {
 
-        private String interval;
+        private BitvavoInterval interval;
         private Integer limit;
         private Long start;
         private Long end;
 
-        public Builder withInterval(String interval) {
+        public Builder withInterval(BitvavoInterval interval) {
             this.interval = interval;
             return this;
         }

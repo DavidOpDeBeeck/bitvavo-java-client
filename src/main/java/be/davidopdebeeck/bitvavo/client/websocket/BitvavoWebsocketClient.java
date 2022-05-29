@@ -3,6 +3,7 @@ package be.davidopdebeeck.bitvavo.client.websocket;
 import be.davidopdebeeck.bitvavo.client.BitvavoClientConfiguration;
 import be.davidopdebeeck.bitvavo.client.api.assets.BitvavoAssetsRequest;
 import be.davidopdebeeck.bitvavo.client.api.assets.BitvavoAssetsResponse;
+import be.davidopdebeeck.bitvavo.client.api.interval.BitvavoInterval;
 import be.davidopdebeeck.bitvavo.client.api.market.BitvavoMarket;
 import be.davidopdebeeck.bitvavo.client.api.market.book.BitvavoMarketBookRequest;
 import be.davidopdebeeck.bitvavo.client.api.market.book.BitvavoMarketBookResponse;
@@ -16,8 +17,12 @@ import be.davidopdebeeck.bitvavo.client.api.subscription.BitvavoChannelSubscript
 import be.davidopdebeeck.bitvavo.client.api.subscription.BitvavoSubscriptionRequest;
 import be.davidopdebeeck.bitvavo.client.api.subscription.account.BitvavoAccountFillSubscriptionResponse;
 import be.davidopdebeeck.bitvavo.client.api.subscription.account.BitvavoAccountOrderSubscriptionResponse;
+import be.davidopdebeeck.bitvavo.client.api.subscription.book.BitvavoBookSubscriptionResponse;
+import be.davidopdebeeck.bitvavo.client.api.subscription.candles.BitvavoCandlesSubscriptionRequest;
+import be.davidopdebeeck.bitvavo.client.api.subscription.candles.BitvavoCandlesSubscriptionResponse;
 import be.davidopdebeeck.bitvavo.client.api.subscription.ticker.BitvavoTickerSubscriptionResponse;
 import be.davidopdebeeck.bitvavo.client.api.subscription.ticker24h.BitvavoTicker24hSubscriptionResponse;
+import be.davidopdebeeck.bitvavo.client.api.subscription.trades.BitvavoTradesSubscriptionResponse;
 import be.davidopdebeeck.bitvavo.client.api.ticker24h.BitvavoTicker24hRequest;
 import be.davidopdebeeck.bitvavo.client.api.ticker24h.BitvavoTicker24hResponse;
 import be.davidopdebeeck.bitvavo.client.api.tickerbook.BitvavoTickerBookRequest;
@@ -56,6 +61,8 @@ public class BitvavoWebsocketClient {
     private static final String BOOK = "book";
     private static final String TRADES = "trades";
     private static final String TRADE = "trade";
+    private static final String CANDLES = "candles";
+    private static final String CANDLE = "candle";
 
     private final BitvavoClientConfiguration configuration;
     private final BitvavoWebsocketEndpoint websocketEndpoint;
@@ -217,7 +224,22 @@ public class BitvavoWebsocketClient {
         websocketEndpoint.doRequest(createRequest(SUBSCRIBE, subscriptionRequest));
     }
 
-    public void tradesSubscription(BitvavoMarket market, BitvavoWebsocketResponseHandler<BitvavoMarketTradesResponse> handler) {
+    public void candlesSubscription(BitvavoMarket market, BitvavoInterval interval, BitvavoWebsocketResponseHandler<BitvavoCandlesSubscriptionResponse> handler) {
+        BitvavoSubscriptionRequest subscriptionRequest = new BitvavoSubscriptionRequest.Builder()
+            .withChannels(List.of(new BitvavoChannelSubscriptionRequest.Builder()
+                .withName(CANDLES)
+                .withMarkets(List.of(market))
+                .withRequest(new BitvavoCandlesSubscriptionRequest.Builder()
+                    .withIntervals(List.of(interval))
+                    .build())
+                .build()))
+            .build();
+
+        websocketEndpoint.registerHandler(CANDLE, createSubscriptionHandler(handler, BitvavoCandlesSubscriptionResponse.class));
+        websocketEndpoint.doRequest(createRequest(SUBSCRIBE, subscriptionRequest));
+    }
+
+    public void tradesSubscription(BitvavoMarket market, BitvavoWebsocketResponseHandler<BitvavoTradesSubscriptionResponse> handler) {
         BitvavoSubscriptionRequest subscriptionRequest = new BitvavoSubscriptionRequest.Builder()
             .withChannels(List.of(new BitvavoChannelSubscriptionRequest.Builder()
                 .withName(TRADES)
@@ -225,11 +247,11 @@ public class BitvavoWebsocketClient {
                 .build()))
             .build();
 
-        websocketEndpoint.registerHandler(TRADE, createSubscriptionHandler(handler, BitvavoMarketTradesResponse.class));
+        websocketEndpoint.registerHandler(TRADE, createSubscriptionHandler(handler, BitvavoTradesSubscriptionResponse.class));
         websocketEndpoint.doRequest(createRequest(SUBSCRIBE, subscriptionRequest));
     }
 
-    public void bookSubscription(BitvavoMarket market, BitvavoWebsocketResponseHandler<BitvavoMarketBookResponse> handler) {
+    public void bookSubscription(BitvavoMarket market, BitvavoWebsocketResponseHandler<BitvavoBookSubscriptionResponse> handler) {
         BitvavoSubscriptionRequest subscriptionRequest = new BitvavoSubscriptionRequest.Builder()
             .withChannels(List.of(new BitvavoChannelSubscriptionRequest.Builder()
                 .withName(BOOK)
@@ -237,7 +259,7 @@ public class BitvavoWebsocketClient {
                 .build()))
             .build();
 
-        websocketEndpoint.registerHandler(BOOK, createSubscriptionHandler(handler, BitvavoMarketBookResponse.class));
+        websocketEndpoint.registerHandler(BOOK, createSubscriptionHandler(handler, BitvavoBookSubscriptionResponse.class));
         websocketEndpoint.doRequest(createRequest(SUBSCRIBE, subscriptionRequest));
     }
 
