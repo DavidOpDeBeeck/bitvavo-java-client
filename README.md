@@ -76,7 +76,7 @@ public class Example {
     * [x] Deposit assets
     * [x] Deposit history
     * [ ] Withdraw assets
-    * [ ] Withdrawal history
+    * [x] Withdrawal history
 * Subscriptions
     * [x] Ticker subscription
     * [x] Ticker 24 hour subscription

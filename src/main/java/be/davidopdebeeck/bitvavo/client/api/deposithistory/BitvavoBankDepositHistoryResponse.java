@@ -2,15 +2,17 @@ package be.davidopdebeeck.bitvavo.client.api.deposithistory;
 
 import be.davidopdebeeck.bitvavo.client.api.asset.BitvavoAssetSymbol;
 
+import java.math.BigDecimal;
+
 import static java.util.Objects.requireNonNull;
 
 public class BitvavoBankDepositHistoryResponse {
 
     private long timestamp;
     private BitvavoAssetSymbol symbol;
-    private String amount;
+    private BigDecimal amount;
     private String address;
-    private String fee;
+    private BigDecimal fee;
 
     private BitvavoBankDepositHistoryResponse() {
     }
@@ -31,7 +33,7 @@ public class BitvavoBankDepositHistoryResponse {
         return symbol;
     }
 
-    public String getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
@@ -39,7 +41,7 @@ public class BitvavoBankDepositHistoryResponse {
         return address;
     }
 
-    public String getFee() {
+    public BigDecimal getFee() {
         return fee;
     }
 
@@ -47,9 +49,9 @@ public class BitvavoBankDepositHistoryResponse {
 
         private Long timestamp;
         private BitvavoAssetSymbol symbol;
-        private String amount;
+        private BigDecimal amount;
         private String address;
-        private String fee;
+        private BigDecimal fee;
 
         public Builder withTimestamp(long timestamp) {
             this.timestamp = timestamp;
@@ -61,7 +63,7 @@ public class BitvavoBankDepositHistoryResponse {
             return this;
         }
 
-        public Builder withAmount(String amount) {
+        public Builder withAmount(BigDecimal amount) {
             this.amount = amount;
             return this;
         }
@@ -71,7 +73,7 @@ public class BitvavoBankDepositHistoryResponse {
             return this;
         }
 
-        public Builder withFee(String fee) {
+        public Builder withFee(BigDecimal fee) {
             this.fee = fee;
             return this;
         }

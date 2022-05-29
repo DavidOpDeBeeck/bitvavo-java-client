@@ -2,6 +2,7 @@ package be.davidopdebeeck.bitvavo.client.api.deposithistory;
 
 import be.davidopdebeeck.bitvavo.client.api.asset.BitvavoAssetSymbol;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -11,11 +12,11 @@ public class BitvavoDepositHistoryResponse {
 
     private long timestamp;
     private BitvavoAssetSymbol symbol;
-    private String amount;
+    private BigDecimal amount;
     private String address;
     private String paymentId;
     private String txId;
-    private String fee;
+    private BigDecimal fee;
 
     private BitvavoDepositHistoryResponse() {
     }
@@ -38,7 +39,7 @@ public class BitvavoDepositHistoryResponse {
         return symbol;
     }
 
-    public String getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
@@ -54,7 +55,7 @@ public class BitvavoDepositHistoryResponse {
         return ofNullable(txId);
     }
 
-    public String getFee() {
+    public BigDecimal getFee() {
         return fee;
     }
 
@@ -62,11 +63,11 @@ public class BitvavoDepositHistoryResponse {
 
         private Long timestamp;
         private BitvavoAssetSymbol symbol;
-        private String amount;
+        private BigDecimal amount;
         private String address;
         private String paymentId;
         private String txId;
-        private String fee;
+        private BigDecimal fee;
 
         public Builder withTimestamp(long timestamp) {
             this.timestamp = timestamp;
@@ -78,7 +79,7 @@ public class BitvavoDepositHistoryResponse {
             return this;
         }
 
-        public Builder withAmount(String amount) {
+        public Builder withAmount(BigDecimal amount) {
             this.amount = amount;
             return this;
         }
@@ -98,7 +99,7 @@ public class BitvavoDepositHistoryResponse {
             return this;
         }
 
-        public Builder withFee(String fee) {
+        public Builder withFee(BigDecimal fee) {
             this.fee = fee;
             return this;
         }

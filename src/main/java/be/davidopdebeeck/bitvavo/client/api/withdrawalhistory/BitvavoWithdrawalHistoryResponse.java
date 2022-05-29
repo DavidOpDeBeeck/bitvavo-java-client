@@ -1,12 +1,14 @@
-package be.davidopdebeeck.bitvavo.client.api.deposithistory;
+package be.davidopdebeeck.bitvavo.client.api.withdrawalhistory;
 
 import be.davidopdebeeck.bitvavo.client.api.asset.BitvavoAssetSymbol;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.Optional.ofNullable;
 
-public class BitvavoDigitalAssetDepositHistoryResponse {
+public class BitvavoWithdrawalHistoryResponse {
 
     private long timestamp;
     private BitvavoAssetSymbol symbol;
@@ -15,18 +17,20 @@ public class BitvavoDigitalAssetDepositHistoryResponse {
     private String paymentId;
     private String txId;
     private BigDecimal fee;
+    private String status;
 
-    private BitvavoDigitalAssetDepositHistoryResponse() {
+    private BitvavoWithdrawalHistoryResponse() {
     }
 
-    private BitvavoDigitalAssetDepositHistoryResponse(Builder builder) {
+    private BitvavoWithdrawalHistoryResponse(Builder builder) {
         timestamp = requireNonNull(builder.timestamp);
         symbol = requireNonNull(builder.symbol);
         amount = requireNonNull(builder.amount);
         address = requireNonNull(builder.address);
-        paymentId = requireNonNull(builder.paymentId);
-        txId = requireNonNull(builder.txId);
+        paymentId = builder.paymentId;
+        txId = builder.txId;
         fee = requireNonNull(builder.fee);
+        status = requireNonNull(builder.status);
     }
 
     public long getTimestamp() {
@@ -45,16 +49,20 @@ public class BitvavoDigitalAssetDepositHistoryResponse {
         return address;
     }
 
-    public String getPaymentId() {
-        return paymentId;
+    public Optional<String> getPaymentId() {
+        return ofNullable(paymentId);
     }
 
-    public String getTxId() {
-        return txId;
+    public Optional<String> getTxId() {
+        return ofNullable(txId);
     }
 
     public BigDecimal getFee() {
         return fee;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public static final class Builder {
@@ -66,6 +74,7 @@ public class BitvavoDigitalAssetDepositHistoryResponse {
         private String paymentId;
         private String txId;
         private BigDecimal fee;
+        private String status;
 
         public Builder withTimestamp(long timestamp) {
             this.timestamp = timestamp;
@@ -102,8 +111,13 @@ public class BitvavoDigitalAssetDepositHistoryResponse {
             return this;
         }
 
-        public BitvavoDigitalAssetDepositHistoryResponse build() {
-            return new BitvavoDigitalAssetDepositHistoryResponse(this);
+        public Builder withStatus(String status) {
+            this.status = status;
+            return this;
+        }
+
+        public BitvavoWithdrawalHistoryResponse build() {
+            return new BitvavoWithdrawalHistoryResponse(this);
         }
     }
 }

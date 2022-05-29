@@ -14,7 +14,6 @@ import be.davidopdebeeck.bitvavo.client.api.deposit.BitvavoDigitalAssetDepositRe
 import be.davidopdebeeck.bitvavo.client.api.deposithistory.BitvavoBankDepositHistoryResponse;
 import be.davidopdebeeck.bitvavo.client.api.deposithistory.BitvavoDepositHistoryRequest;
 import be.davidopdebeeck.bitvavo.client.api.deposithistory.BitvavoDepositHistoryResponse;
-import be.davidopdebeeck.bitvavo.client.api.deposithistory.BitvavoDigitalAssetDepositHistoryResponse;
 import be.davidopdebeeck.bitvavo.client.api.market.BitvavoMarket;
 import be.davidopdebeeck.bitvavo.client.api.market.book.BitvavoMarketBookRequest;
 import be.davidopdebeeck.bitvavo.client.api.market.book.BitvavoMarketBookResponse;
@@ -32,6 +31,8 @@ import be.davidopdebeeck.bitvavo.client.api.tickerprice.BitvavoTickerPriceReques
 import be.davidopdebeeck.bitvavo.client.api.tickerprice.BitvavoTickerPriceResponse;
 import be.davidopdebeeck.bitvavo.client.api.time.BitvavoTimeResponse;
 import be.davidopdebeeck.bitvavo.client.api.trades.BitvavoTradesRequest;
+import be.davidopdebeeck.bitvavo.client.api.withdrawalhistory.BitvavoWithdrawalHistoryRequest;
+import be.davidopdebeeck.bitvavo.client.api.withdrawalhistory.BitvavoWithdrawalHistoryResponse;
 import be.davidopdebeeck.bitvavo.client.http.request.BitvavoHttpRequest;
 import be.davidopdebeeck.bitvavo.client.http.response.BitvavoHttpResponse;
 import be.davidopdebeeck.bitvavo.client.utils.URIBuilder;
@@ -238,35 +239,50 @@ public class BitvavoHttpClient {
         return doRequest(createGETRequest(uri), BitvavoDigitalAssetDepositResponse.class);
     }
 
-    public BitvavoHttpResponse<BitvavoDepositHistoryResponse> depositHistory() {
+    public BitvavoHttpResponse<BitvavoDepositHistoryResponse[]> depositHistory() {
         URI uri = createURI("/depositHistory")
             .build();
 
-        return doRequest(createGETRequest(uri), BitvavoDepositHistoryResponse.class);
+        return doRequest(createGETRequest(uri), BitvavoDepositHistoryResponse[].class);
     }
 
-    public BitvavoHttpResponse<BitvavoDepositHistoryResponse> depositHistory(BitvavoDepositHistoryRequest request) {
+    public BitvavoHttpResponse<BitvavoDepositHistoryResponse[]> depositHistory(BitvavoDepositHistoryRequest request) {
         URI uri = createURI("/depositHistory")
             .withQueryParameters(convertToMap(request))
             .build();
 
-        return doRequest(createGETRequest(uri), BitvavoDepositHistoryResponse.class);
+        return doRequest(createGETRequest(uri), BitvavoDepositHistoryResponse[].class);
     }
 
-    public BitvavoHttpResponse<BitvavoBankDepositHistoryResponse> bankDeposit(BitvavoDepositHistoryRequest request) {
+    public BitvavoHttpResponse<BitvavoBankDepositHistoryResponse[]> bankDeposit(BitvavoDepositHistoryRequest request) {
         URI uri = createURI("/depositHistory")
             .withQueryParameters(convertToMap(request))
             .build();
 
-        return doRequest(createGETRequest(uri), BitvavoBankDepositHistoryResponse.class);
+        return doRequest(createGETRequest(uri), BitvavoBankDepositHistoryResponse[].class);
     }
 
-    public BitvavoHttpResponse<BitvavoDigitalAssetDepositHistoryResponse> digitalAssetDeposit(BitvavoDepositHistoryRequest request) {
+    public BitvavoHttpResponse<BitvavoBankDepositHistoryResponse[]> digitalAssetDeposit(BitvavoDepositHistoryRequest request) {
         URI uri = createURI("/depositHistory")
             .withQueryParameters(convertToMap(request))
             .build();
 
-        return doRequest(createGETRequest(uri), BitvavoDigitalAssetDepositHistoryResponse.class);
+        return doRequest(createGETRequest(uri), BitvavoBankDepositHistoryResponse[].class);
+    }
+
+    public BitvavoHttpResponse<BitvavoWithdrawalHistoryResponse[]> withdrawalHistory() {
+        URI uri = createURI("/withdrawalHistory")
+            .build();
+
+        return doRequest(createGETRequest(uri), BitvavoWithdrawalHistoryResponse[].class);
+    }
+
+    public BitvavoHttpResponse<BitvavoWithdrawalHistoryResponse[]> withdrawalHistory(BitvavoWithdrawalHistoryRequest request) {
+        URI uri = createURI("/withdrawalHistory")
+            .withQueryParameters(convertToMap(request))
+            .build();
+
+        return doRequest(createGETRequest(uri), BitvavoWithdrawalHistoryResponse[].class);
     }
 
     private BitvavoHttpRequest createGETRequest(URI uri) {
