@@ -33,6 +33,7 @@ public class BitvavoAssetSymbols {
     public static BitvavoAssetSymbol STORJ = BitvavoAssetSymbol.symbol("STORJ");
     public static BitvavoAssetSymbol STRAX = BitvavoAssetSymbol.symbol("STRAX");
     public static BitvavoAssetSymbol TRX = BitvavoAssetSymbol.symbol("TRX");
+    public static BitvavoAssetSymbol VET = BitvavoAssetSymbol.symbol("VET");
     public static BitvavoAssetSymbol XTZ = BitvavoAssetSymbol.symbol("XTZ");
     public static BitvavoAssetSymbol YFI = BitvavoAssetSymbol.symbol("YFI");
     public static BitvavoAssetSymbol ZRX = BitvavoAssetSymbol.symbol("ZRX");
