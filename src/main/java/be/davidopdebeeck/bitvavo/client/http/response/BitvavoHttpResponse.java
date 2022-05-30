@@ -7,6 +7,7 @@ import java.net.http.HttpResponse;
 
 import static java.util.Objects.requireNonNull;
 
+// TODO: add handler when request fails -> example: {"errorCode": 110,"error": "Invalid endpoint. Please check url and HTTP method."}
 public class BitvavoHttpResponse<T> {
 
     private final ObjectMapper objectMapper;

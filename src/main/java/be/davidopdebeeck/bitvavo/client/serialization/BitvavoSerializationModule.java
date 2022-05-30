@@ -10,6 +10,7 @@ import be.davidopdebeeck.bitvavo.client.api.market.candles.BitvavoMarketCandlesR
 import be.davidopdebeeck.bitvavo.client.api.subscription.ticker24h.BitvavoTicker24hSubscriptionResponse;
 import be.davidopdebeeck.bitvavo.client.serialization.asset.BitvavoAssetSymbolDeserializer;
 import be.davidopdebeeck.bitvavo.client.serialization.asset.BitvavoAssetSymbolSerializer;
+import be.davidopdebeeck.bitvavo.client.serialization.bigdecimal.BigDecimalSerializer;
 import be.davidopdebeeck.bitvavo.client.serialization.book.BitvavoAskDeserializer;
 import be.davidopdebeeck.bitvavo.client.serialization.book.BitvavoBidDeserializer;
 import be.davidopdebeeck.bitvavo.client.serialization.candles.BitvavoCandleDeserializer;
@@ -22,6 +23,8 @@ import be.davidopdebeeck.bitvavo.client.serialization.subscription.BitvavoTicker
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+
+import java.math.BigDecimal;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
@@ -43,6 +46,8 @@ public class BitvavoSerializationModule {
 
     public static Module bitvavoSerializationModule() {
         return new SimpleModule()
+            // BigDecimal
+            .addSerializer(BigDecimal.class, new BigDecimalSerializer())
             // book
             .addDeserializer(BitvavoBid.class, new BitvavoBidDeserializer())
             .addDeserializer(BitvavoAsk.class, new BitvavoAskDeserializer())

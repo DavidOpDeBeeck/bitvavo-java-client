@@ -31,8 +31,12 @@ import be.davidopdebeeck.bitvavo.client.api.tickerprice.BitvavoTickerPriceReques
 import be.davidopdebeeck.bitvavo.client.api.tickerprice.BitvavoTickerPriceResponse;
 import be.davidopdebeeck.bitvavo.client.api.time.BitvavoTimeResponse;
 import be.davidopdebeeck.bitvavo.client.api.trades.BitvavoTradesRequest;
+import be.davidopdebeeck.bitvavo.client.api.withdrawal.BitvavoWithdrawalRequest;
+import be.davidopdebeeck.bitvavo.client.api.withdrawal.BitvavoWithdrawalResponse;
 import be.davidopdebeeck.bitvavo.client.api.withdrawalhistory.BitvavoWithdrawalHistoryRequest;
 import be.davidopdebeeck.bitvavo.client.api.withdrawalhistory.BitvavoWithdrawalHistoryResponse;
+import be.davidopdebeeck.bitvavo.client.http.request.BitvavoHttpGETRequest;
+import be.davidopdebeeck.bitvavo.client.http.request.BitvavoHttpPOSTRequest;
 import be.davidopdebeeck.bitvavo.client.http.request.BitvavoHttpRequest;
 import be.davidopdebeeck.bitvavo.client.http.response.BitvavoHttpResponse;
 import be.davidopdebeeck.bitvavo.client.utils.URIBuilder;
@@ -270,6 +274,13 @@ public class BitvavoHttpClient {
         return doRequest(createGETRequest(uri), BitvavoBankDepositHistoryResponse[].class);
     }
 
+    public BitvavoHttpResponse<BitvavoWithdrawalResponse> withdrawal(BitvavoWithdrawalRequest request) {
+        URI uri = createURI("/withdrawal")
+            .build();
+
+        return doRequest(createPOSTRequest(uri, request), BitvavoWithdrawalResponse.class);
+    }
+
     public BitvavoHttpResponse<BitvavoWithdrawalHistoryResponse[]> withdrawalHistory() {
         URI uri = createURI("/withdrawalHistory")
             .build();
@@ -286,10 +297,17 @@ public class BitvavoHttpClient {
     }
 
     private BitvavoHttpRequest createGETRequest(URI uri) {
-        return new BitvavoHttpRequest.Builder()
+        return new BitvavoHttpGETRequest.Builder()
             .withUri(uri)
-            .withMethod("GET")
             .withConfiguration(configuration)
+            .build();
+    }
+
+    private BitvavoHttpRequest createPOSTRequest(URI uri, Object body) {
+        return new BitvavoHttpPOSTRequest.Builder()
+            .withUri(uri)
+            .withConfiguration(configuration)
+            .withBody(body)
             .build();
     }
 

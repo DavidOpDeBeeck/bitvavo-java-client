@@ -11,6 +11,15 @@ public class SignatureUtils {
 
     public static String createSignature(String path, String method, long currentTimeMillis, String apiSecret) {
         String message = currentTimeMillis + method + path;
+        return createSignature(message, apiSecret);
+    }
+
+    public static String createSignature(String path, String method, String body, long currentTimeMillis, String apiSecret) {
+        String message = currentTimeMillis + method + path + body;
+        return createSignature(message, apiSecret);
+    }
+
+    private static String createSignature(String message, String apiSecret) {
         String signature = sha256(apiSecret, message);
         LOGGER.debug("Created signature '{}' for message '{}'", signature, message);
         return signature;
