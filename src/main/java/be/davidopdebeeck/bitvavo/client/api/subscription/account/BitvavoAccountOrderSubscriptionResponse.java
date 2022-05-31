@@ -1,8 +1,16 @@
 package be.davidopdebeeck.bitvavo.client.api.subscription.account;
 
 import be.davidopdebeeck.bitvavo.client.api.market.BitvavoMarket;
+import be.davidopdebeeck.bitvavo.client.api.order.BitvavoOrderStatus;
+import be.davidopdebeeck.bitvavo.client.api.ordertypes.BitvavoOrderType;
+import be.davidopdebeeck.bitvavo.client.api.selftradeprevention.BitvavoSelfTradePrevention;
+import be.davidopdebeeck.bitvavo.client.api.side.BitvavoSide;
+import be.davidopdebeeck.bitvavo.client.api.timeinforce.BitvavoTimeInForce;
+import be.davidopdebeeck.bitvavo.client.api.trigger.BitvavoTriggerReference;
+import be.davidopdebeeck.bitvavo.client.api.trigger.BitvavoTriggerType;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 import static java.util.Objects.requireNonNull;
 
@@ -10,11 +18,11 @@ public class BitvavoAccountOrderSubscriptionResponse {
 
     private String orderId;
     private BitvavoMarket market;
-    private long created;
-    private long updated;
-    private String status;
-    private String side;
-    private String orderType;
+    private Instant created;
+    private Instant updated;
+    private BitvavoOrderStatus status;
+    private BitvavoSide side;
+    private BitvavoOrderType orderType;
     private BigDecimal amount;
     private BigDecimal amountRemaining;
     private BigDecimal price;
@@ -22,11 +30,11 @@ public class BitvavoAccountOrderSubscriptionResponse {
     private String onHoldCurrency;
     private BigDecimal triggerPrice;
     private BigDecimal triggerAmount;
-    private String triggerType;
-    private String triggerReference;
-    private String timeInForce;
+    private BitvavoTriggerType triggerType;
+    private BitvavoTriggerReference triggerReference;
+    private BitvavoTimeInForce timeInForce;
     private boolean postOnly;
-    private String selfTradePrevention;
+    private BitvavoSelfTradePrevention selfTradePrevention;
     private boolean visible;
 
     private BitvavoAccountOrderSubscriptionResponse() {
@@ -63,23 +71,23 @@ public class BitvavoAccountOrderSubscriptionResponse {
         return market;
     }
 
-    public long getCreated() {
+    public Instant getCreated() {
         return created;
     }
 
-    public long getUpdated() {
+    public Instant getUpdated() {
         return updated;
     }
 
-    public String getStatus() {
+    public BitvavoOrderStatus getStatus() {
         return status;
     }
 
-    public String getSide() {
+    public BitvavoSide getSide() {
         return side;
     }
 
-    public String getOrderType() {
+    public BitvavoOrderType getOrderType() {
         return orderType;
     }
 
@@ -111,15 +119,15 @@ public class BitvavoAccountOrderSubscriptionResponse {
         return triggerAmount;
     }
 
-    public String getTriggerType() {
+    public BitvavoTriggerType getTriggerType() {
         return triggerType;
     }
 
-    public String getTriggerReference() {
+    public BitvavoTriggerReference getTriggerReference() {
         return triggerReference;
     }
 
-    public String getTimeInForce() {
+    public BitvavoTimeInForce getTimeInForce() {
         return timeInForce;
     }
 
@@ -127,7 +135,7 @@ public class BitvavoAccountOrderSubscriptionResponse {
         return postOnly;
     }
 
-    public String getSelfTradePrevention() {
+    public BitvavoSelfTradePrevention getSelfTradePrevention() {
         return selfTradePrevention;
     }
 
@@ -139,11 +147,11 @@ public class BitvavoAccountOrderSubscriptionResponse {
 
         private String orderId;
         private BitvavoMarket market;
-        private Long created;
-        private Long updated;
-        private String status;
-        private String side;
-        private String orderType;
+        private Instant created;
+        private Instant updated;
+        private BitvavoOrderStatus status;
+        private BitvavoSide side;
+        private BitvavoOrderType orderType;
         private BigDecimal amount;
         private BigDecimal amountRemaining;
         private BigDecimal price;
@@ -151,11 +159,11 @@ public class BitvavoAccountOrderSubscriptionResponse {
         private String onHoldCurrency;
         private BigDecimal triggerPrice;
         private BigDecimal triggerAmount;
-        private String triggerType;
-        private String triggerReference;
-        private String timeInForce;
+        private BitvavoTriggerType triggerType;
+        private BitvavoTriggerReference triggerReference;
+        private BitvavoTimeInForce timeInForce;
         private Boolean postOnly;
-        private String selfTradePrevention;
+        private BitvavoSelfTradePrevention selfTradePrevention;
         private Boolean visible;
 
         public Builder withOrderId(String orderId) {
@@ -168,27 +176,27 @@ public class BitvavoAccountOrderSubscriptionResponse {
             return this;
         }
 
-        public Builder withCreated(long created) {
+        public Builder withCreated(Instant created) {
             this.created = created;
             return this;
         }
 
-        public Builder withUpdated(long updated) {
+        public Builder withUpdated(Instant updated) {
             this.updated = updated;
             return this;
         }
 
-        public Builder withStatus(String status) {
+        public Builder withStatus(BitvavoOrderStatus status) {
             this.status = status;
             return this;
         }
 
-        public Builder withSide(String side) {
+        public Builder withSide(BitvavoSide side) {
             this.side = side;
             return this;
         }
 
-        public Builder withOrderType(String orderType) {
+        public Builder withOrderType(BitvavoOrderType orderType) {
             this.orderType = orderType;
             return this;
         }
@@ -228,17 +236,17 @@ public class BitvavoAccountOrderSubscriptionResponse {
             return this;
         }
 
-        public Builder withTriggerType(String triggerType) {
+        public Builder withTriggerType(BitvavoTriggerType triggerType) {
             this.triggerType = triggerType;
             return this;
         }
 
-        public Builder withTriggerReference(String triggerReference) {
+        public Builder withTriggerReference(BitvavoTriggerReference triggerReference) {
             this.triggerReference = triggerReference;
             return this;
         }
 
-        public Builder withTimeInForce(String timeInForce) {
+        public Builder withTimeInForce(BitvavoTimeInForce timeInForce) {
             this.timeInForce = timeInForce;
             return this;
         }
@@ -248,7 +256,7 @@ public class BitvavoAccountOrderSubscriptionResponse {
             return this;
         }
 
-        public Builder withSelfTradePrevention(String selfTradePrevention) {
+        public Builder withSelfTradePrevention(BitvavoSelfTradePrevention selfTradePrevention) {
             this.selfTradePrevention = selfTradePrevention;
             return this;
         }

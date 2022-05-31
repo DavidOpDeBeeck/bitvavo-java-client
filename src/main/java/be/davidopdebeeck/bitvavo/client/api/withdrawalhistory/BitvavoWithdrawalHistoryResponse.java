@@ -3,6 +3,7 @@ package be.davidopdebeeck.bitvavo.client.api.withdrawalhistory;
 import be.davidopdebeeck.bitvavo.client.api.asset.BitvavoAssetSymbol;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -10,7 +11,7 @@ import static java.util.Optional.ofNullable;
 
 public class BitvavoWithdrawalHistoryResponse {
 
-    private long timestamp;
+    private Instant timestamp;
     private BitvavoAssetSymbol symbol;
     private BigDecimal amount;
     private String address;
@@ -33,7 +34,7 @@ public class BitvavoWithdrawalHistoryResponse {
         status = requireNonNull(builder.status);
     }
 
-    public long getTimestamp() {
+    public Instant getTimestamp() {
         return timestamp;
     }
 
@@ -67,7 +68,7 @@ public class BitvavoWithdrawalHistoryResponse {
 
     public static final class Builder {
 
-        private Long timestamp;
+        private Instant timestamp;
         private BitvavoAssetSymbol symbol;
         private BigDecimal amount;
         private String address;
@@ -76,7 +77,7 @@ public class BitvavoWithdrawalHistoryResponse {
         private BigDecimal fee;
         private String status;
 
-        public Builder withTimestamp(long timestamp) {
+        public Builder withTimestamp(Instant timestamp) {
             this.timestamp = timestamp;
             return this;
         }

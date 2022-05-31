@@ -1,6 +1,8 @@
 package be.davidopdebeeck.bitvavo.client.api.markets;
 
 import be.davidopdebeeck.bitvavo.client.api.market.BitvavoMarket;
+import be.davidopdebeeck.bitvavo.client.api.market.BitvavoMarketStatus;
+import be.davidopdebeeck.bitvavo.client.api.ordertypes.BitvavoOrderType;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -10,13 +12,13 @@ import static java.util.Objects.requireNonNull;
 public class BitvavoMarketsResponse {
 
     private BitvavoMarket market;
-    private String status;
+    private BitvavoMarketStatus status;
     private String base;
     private String quote;
     private BigDecimal pricePrecision;
     private BigDecimal minOrderInQuoteAsset;
     private BigDecimal minOrderInBaseAsset;
-    private List<String> orderTypes;
+    private List<BitvavoOrderType> orderTypes;
 
     private BitvavoMarketsResponse() {
     }
@@ -36,7 +38,7 @@ public class BitvavoMarketsResponse {
         return market;
     }
 
-    public String getStatus() {
+    public BitvavoMarketStatus getStatus() {
         return status;
     }
 
@@ -60,27 +62,27 @@ public class BitvavoMarketsResponse {
         return minOrderInBaseAsset;
     }
 
-    public List<String> getOrderTypes() {
+    public List<BitvavoOrderType> getOrderTypes() {
         return orderTypes;
     }
 
     public static final class Builder {
 
         private BitvavoMarket market;
-        private String status;
+        private BitvavoMarketStatus status;
         private String base;
         private String quote;
         private BigDecimal pricePrecision;
         private BigDecimal minOrderInQuoteAsset;
         private BigDecimal minOrderInBaseAsset;
-        private List<String> orderTypes;
+        private List<BitvavoOrderType> orderTypes;
 
         public Builder withMarket(BitvavoMarket market) {
             this.market = market;
             return this;
         }
 
-        public Builder withStatus(String status) {
+        public Builder withStatus(BitvavoMarketStatus status) {
             this.status = status;
             return this;
         }
@@ -110,7 +112,7 @@ public class BitvavoMarketsResponse {
             return this;
         }
 
-        public Builder withOrderTypes(List<String> orderTypes) {
+        public Builder withOrderTypes(List<BitvavoOrderType> orderTypes) {
             this.orderTypes = orderTypes;
             return this;
         }

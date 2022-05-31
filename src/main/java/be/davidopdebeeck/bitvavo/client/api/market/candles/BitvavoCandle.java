@@ -1,12 +1,13 @@
 package be.davidopdebeeck.bitvavo.client.api.market.candles;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 import static java.util.Objects.requireNonNull;
 
 public class BitvavoCandle {
 
-    private final Long timestamp;
+    private final Instant timestamp;
     private final BigDecimal open;
     private final BigDecimal high;
     private final BigDecimal low;
@@ -22,7 +23,7 @@ public class BitvavoCandle {
         volume = requireNonNull(builder.volume);
     }
 
-    public Long getTimestamp() {
+    public Instant getTimestamp() {
         return timestamp;
     }
 
@@ -48,14 +49,14 @@ public class BitvavoCandle {
 
     public static final class Builder {
 
-        private Long timestamp;
+        private Instant timestamp;
         private BigDecimal open;
         private BigDecimal high;
         private BigDecimal low;
         private BigDecimal close;
         private BigDecimal volume;
 
-        public Builder withTimestamp(Long timestamp) {
+        public Builder withTimestamp(Instant timestamp) {
             this.timestamp = timestamp;
             return this;
         }

@@ -2,6 +2,7 @@ package be.davidopdebeeck.bitvavo.client.api.withdrawalhistory;
 
 import be.davidopdebeeck.bitvavo.client.api.asset.BitvavoAssetSymbol;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
@@ -10,8 +11,8 @@ public class BitvavoWithdrawalHistoryRequest {
 
     private final BitvavoAssetSymbol symbol;
     private final Integer limit;
-    private final Long start;
-    private final Long end;
+    private final Instant start;
+    private final Instant end;
 
     private BitvavoWithdrawalHistoryRequest(Builder builder) {
         symbol = builder.symbol;
@@ -28,11 +29,11 @@ public class BitvavoWithdrawalHistoryRequest {
         return ofNullable(limit);
     }
 
-    public Optional<Long> getStart() {
+    public Optional<Instant> getStart() {
         return ofNullable(start);
     }
 
-    public Optional<Long> getEnd() {
+    public Optional<Instant> getEnd() {
         return ofNullable(end);
     }
 
@@ -40,8 +41,8 @@ public class BitvavoWithdrawalHistoryRequest {
 
         private BitvavoAssetSymbol symbol;
         private Integer limit;
-        private Long start;
-        private Long end;
+        private Instant start;
+        private Instant end;
 
         public Builder withSymbol(BitvavoAssetSymbol symbol) {
             this.symbol = symbol;
@@ -53,12 +54,12 @@ public class BitvavoWithdrawalHistoryRequest {
             return this;
         }
 
-        public Builder withStart(Long start) {
+        public Builder withStart(Instant start) {
             this.start = start;
             return this;
         }
 
-        public Builder withEnd(Long end) {
+        public Builder withEnd(Instant end) {
             this.end = end;
             return this;
         }

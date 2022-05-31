@@ -3,6 +3,7 @@ package be.davidopdebeeck.bitvavo.client.api.ticker24h;
 import be.davidopdebeeck.bitvavo.client.api.market.BitvavoMarket;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 import static java.util.Objects.requireNonNull;
 
@@ -19,7 +20,7 @@ public class BitvavoTicker24hResponse {
     private BigDecimal bidSize;
     private BigDecimal ask;
     private BigDecimal askSize;
-    private long timestamp;
+    private Instant timestamp;
 
     private BitvavoTicker24hResponse() {
     }
@@ -83,7 +84,7 @@ public class BitvavoTicker24hResponse {
         return askSize;
     }
 
-    public long getTimestamp() {
+    public Instant getTimestamp() {
         return timestamp;
     }
 
@@ -100,7 +101,7 @@ public class BitvavoTicker24hResponse {
         private BigDecimal bidSize;
         private BigDecimal ask;
         private BigDecimal askSize;
-        private Long timestamp;
+        private Instant timestamp;
 
         public Builder withMarket(BitvavoMarket market) {
             this.market = market;
@@ -157,7 +158,7 @@ public class BitvavoTicker24hResponse {
             return this;
         }
 
-        public Builder withTimestamp(long timestamp) {
+        public Builder withTimestamp(Instant timestamp) {
             this.timestamp = timestamp;
             return this;
         }

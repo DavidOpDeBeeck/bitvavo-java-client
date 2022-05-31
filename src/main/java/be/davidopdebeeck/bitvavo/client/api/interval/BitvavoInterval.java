@@ -1,8 +1,6 @@
 package be.davidopdebeeck.bitvavo.client.api.interval;
 
-import java.util.Arrays;
-
-import static java.lang.String.format;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum BitvavoInterval {
     ONE_MINUTE("1m"),
@@ -23,14 +21,8 @@ public enum BitvavoInterval {
         this.identifier = identifier;
     }
 
+    @JsonValue
     public String getIdentifier() {
         return identifier;
-    }
-
-    public static BitvavoInterval fromIdentifier(String identifier) {
-        return Arrays.stream(values())
-            .filter(interval -> interval.identifier.equals(identifier))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException(format("Identifier %s is currently not defined in BitvavoInterval", identifier)));
     }
 }

@@ -1,16 +1,19 @@
 package be.davidopdebeeck.bitvavo.client.api.market.trades;
 
+import be.davidopdebeeck.bitvavo.client.api.side.BitvavoSide;
+
 import java.math.BigDecimal;
+import java.time.Instant;
 
 import static java.util.Objects.requireNonNull;
 
 public class BitvavoMarketTradesResponse {
 
-    private long timestamp;
+    private Instant timestamp;
     private String id;
     private BigDecimal amount;
     private BigDecimal price;
-    private String side;
+    private BitvavoSide side;
 
     private BitvavoMarketTradesResponse() {
     }
@@ -23,7 +26,7 @@ public class BitvavoMarketTradesResponse {
         side = requireNonNull(builder.side);
     }
 
-    public long getTimestamp() {
+    public Instant getTimestamp() {
         return timestamp;
     }
 
@@ -39,19 +42,19 @@ public class BitvavoMarketTradesResponse {
         return price;
     }
 
-    public String getSide() {
+    public BitvavoSide getSide() {
         return side;
     }
 
     public static final class Builder {
 
-        private Long timestamp;
+        private Instant timestamp;
         private String id;
         private BigDecimal amount;
         private BigDecimal price;
-        private String side;
+        private BitvavoSide side;
 
-        public Builder withTimestamp(long timestamp) {
+        public Builder withTimestamp(Instant timestamp) {
             this.timestamp = timestamp;
             return this;
         }
@@ -71,7 +74,7 @@ public class BitvavoMarketTradesResponse {
             return this;
         }
 
-        public Builder withSide(String side) {
+        public Builder withSide(BitvavoSide side) {
             this.side = side;
             return this;
         }

@@ -14,10 +14,10 @@ public class BitvavoAssetsResponse {
     private long decimals;
     private BigDecimal depositFee;
     private long depositConfirmations;
-    private String depositStatus;
+    private BitvavoAssetStatus depositStatus;
     private BigDecimal withdrawalFee;
     private BigDecimal withdrawalMinAmount;
-    private String withdrawalStatus;
+    private BitvavoAssetStatus withdrawalStatus;
     private List<String> networks;
     private String message;
 
@@ -58,7 +58,7 @@ public class BitvavoAssetsResponse {
         return depositConfirmations;
     }
 
-    public String getDepositStatus() {
+    public BitvavoAssetStatus getDepositStatus() {
         return depositStatus;
     }
 
@@ -70,7 +70,7 @@ public class BitvavoAssetsResponse {
         return withdrawalMinAmount;
     }
 
-    public String getWithdrawalStatus() {
+    public BitvavoAssetStatus getWithdrawalStatus() {
         return withdrawalStatus;
     }
 
@@ -89,10 +89,10 @@ public class BitvavoAssetsResponse {
         private Long decimals;
         private BigDecimal depositFee;
         private Long depositConfirmations;
-        private String depositStatus;
+        private BitvavoAssetStatus depositStatus;
         private BigDecimal withdrawalFee;
         private BigDecimal withdrawalMinAmount;
-        private String withdrawalStatus;
+        private BitvavoAssetStatus withdrawalStatus;
         private List<String> networks;
         private String message;
 
@@ -121,7 +121,7 @@ public class BitvavoAssetsResponse {
             return this;
         }
 
-        public Builder withDepositStatus(String depositStatus) {
+        public Builder withDepositStatus(BitvavoAssetStatus depositStatus) {
             this.depositStatus = depositStatus;
             return this;
         }
@@ -136,7 +136,7 @@ public class BitvavoAssetsResponse {
             return this;
         }
 
-        public Builder withWithdrawalStatus(String withdrawalStatus) {
+        public Builder withWithdrawalStatus(BitvavoAssetStatus withdrawalStatus) {
             this.withdrawalStatus = withdrawalStatus;
             return this;
         }

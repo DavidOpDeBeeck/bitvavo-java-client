@@ -2,6 +2,7 @@ package be.davidopdebeeck.bitvavo.client.api.trades;
 
 import be.davidopdebeeck.bitvavo.client.api.market.BitvavoMarket;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
@@ -11,8 +12,8 @@ public class BitvavoTradesRequest {
 
     private final BitvavoMarket market;
     private final Integer limit;
-    private final Long start;
-    private final Long end;
+    private final Instant start;
+    private final Instant end;
     private final String tradeIdFrom;
     private final String tradeIdTo;
 
@@ -33,11 +34,11 @@ public class BitvavoTradesRequest {
         return ofNullable(limit);
     }
 
-    public Optional<Long> getStart() {
+    public Optional<Instant> getStart() {
         return ofNullable(start);
     }
 
-    public Optional<Long> getEnd() {
+    public Optional<Instant> getEnd() {
         return ofNullable(end);
     }
 
@@ -53,8 +54,8 @@ public class BitvavoTradesRequest {
 
         private BitvavoMarket market;
         private Integer limit;
-        private Long start;
-        private Long end;
+        private Instant start;
+        private Instant end;
         private String tradeIdFrom;
         private String tradeIdTo;
 
@@ -68,12 +69,12 @@ public class BitvavoTradesRequest {
             return this;
         }
 
-        public Builder withStart(Long start) {
+        public Builder withStart(Instant start) {
             this.start = start;
             return this;
         }
 
-        public Builder withEnd(Long end) {
+        public Builder withEnd(Instant end) {
             this.end = end;
             return this;
         }

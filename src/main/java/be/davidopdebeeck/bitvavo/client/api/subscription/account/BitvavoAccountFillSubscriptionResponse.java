@@ -1,8 +1,10 @@
 package be.davidopdebeeck.bitvavo.client.api.subscription.account;
 
 import be.davidopdebeeck.bitvavo.client.api.market.BitvavoMarket;
+import be.davidopdebeeck.bitvavo.client.api.side.BitvavoSide;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 import static java.util.Objects.requireNonNull;
 
@@ -11,9 +13,9 @@ public class BitvavoAccountFillSubscriptionResponse {
     private String orderId;
     private BitvavoMarket market;
     private String fillId;
-    private long timestamp;
+    private Instant timestamp;
     private BigDecimal amount;
-    private String side;
+    private BitvavoSide side;
     private BigDecimal price;
     private boolean taker;
     private BigDecimal fee;
@@ -44,7 +46,7 @@ public class BitvavoAccountFillSubscriptionResponse {
         return fillId;
     }
 
-    public long getTimestamp() {
+    public Instant getTimestamp() {
         return timestamp;
     }
 
@@ -52,7 +54,7 @@ public class BitvavoAccountFillSubscriptionResponse {
         return amount;
     }
 
-    public String getSide() {
+    public BitvavoSide getSide() {
         return side;
     }
 
@@ -80,9 +82,9 @@ public class BitvavoAccountFillSubscriptionResponse {
 
         private String orderId;
         private String fillId;
-        private Long timestamp;
+        private Instant timestamp;
         private BigDecimal amount;
-        private String side;
+        private BitvavoSide side;
         private BigDecimal price;
         private Boolean taker;
         private BigDecimal fee;
@@ -99,7 +101,7 @@ public class BitvavoAccountFillSubscriptionResponse {
             return this;
         }
 
-        public Builder withTimestamp(long timestamp) {
+        public Builder withTimestamp(Instant timestamp) {
             this.timestamp = timestamp;
             return this;
         }
@@ -109,7 +111,7 @@ public class BitvavoAccountFillSubscriptionResponse {
             return this;
         }
 
-        public Builder withSide(String side) {
+        public Builder withSide(BitvavoSide side) {
             this.side = side;
             return this;
         }

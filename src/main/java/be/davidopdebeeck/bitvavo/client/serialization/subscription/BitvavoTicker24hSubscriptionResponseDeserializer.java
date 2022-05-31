@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 public class BitvavoTicker24hSubscriptionResponseDeserializer extends JsonDeserializer<BitvavoTicker24hSubscriptionResponse> {
 
@@ -29,7 +30,7 @@ public class BitvavoTicker24hSubscriptionResponseDeserializer extends JsonDeseri
             .withBidSize(new BigDecimal(dataNode.get("bidSize").asText()))
             .withAsk(new BigDecimal(dataNode.get("ask").asText()))
             .withAskSize(new BigDecimal(dataNode.get("askSize").asText()))
-            .withTimestamp(dataNode.get("timestamp").asLong())
+            .withTimestamp(context.readTreeAsValue(dataNode.get("timestamp"), Instant.class))
             .build();
     }
 }

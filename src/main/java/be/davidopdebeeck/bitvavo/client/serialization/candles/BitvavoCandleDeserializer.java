@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 public class BitvavoCandleDeserializer extends JsonDeserializer<BitvavoCandle> {
 
@@ -16,7 +17,7 @@ public class BitvavoCandleDeserializer extends JsonDeserializer<BitvavoCandle> {
         JsonNode node = parser.readValueAsTree();
 
         return new BitvavoCandle.Builder()
-            .withTimestamp(node.get(0).asLong())
+            .withTimestamp(context.readTreeAsValue(node.get(0), Instant.class))
             .withOpen(new BigDecimal(node.get(1).asText()))
             .withHigh(new BigDecimal(node.get(2).asText()))
             .withLow(new BigDecimal(node.get(3).asText()))

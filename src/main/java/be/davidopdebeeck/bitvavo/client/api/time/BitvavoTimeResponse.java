@@ -1,10 +1,12 @@
 package be.davidopdebeeck.bitvavo.client.api.time;
 
+import java.time.Instant;
+
 import static java.util.Objects.requireNonNull;
 
 public class BitvavoTimeResponse {
 
-    private long time;
+    private Instant time;
 
     private BitvavoTimeResponse() {
     }
@@ -13,15 +15,15 @@ public class BitvavoTimeResponse {
         time = requireNonNull(builder.time);
     }
 
-    public long getTime() {
+    public Instant getTime() {
         return time;
     }
 
     public static final class Builder {
 
-        private Long time;
+        private Instant time;
 
-        public Builder withTime(long time) {
+        public Builder withTime(Instant time) {
             this.time = time;
             return this;
         }
