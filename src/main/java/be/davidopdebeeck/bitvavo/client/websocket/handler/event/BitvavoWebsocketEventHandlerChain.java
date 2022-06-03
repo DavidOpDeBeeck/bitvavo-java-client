@@ -2,6 +2,7 @@ package be.davidopdebeeck.bitvavo.client.websocket.handler.event;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class BitvavoWebsocketEventHandlerChain {
 
@@ -19,8 +20,8 @@ public class BitvavoWebsocketEventHandlerChain {
         this.handlers.add(handler);
     }
 
-    public synchronized void handle(String response) {
-        handlers.forEach(handler -> handler.handle(response));
+    public synchronized void handle(Map<String, Object> responseAsMap) {
+        handlers.forEach(handler -> handler.handle(responseAsMap));
         handlers.removeIf(BitvavoWebsocketEventHandler::isOneTimeUse);
     }
 }

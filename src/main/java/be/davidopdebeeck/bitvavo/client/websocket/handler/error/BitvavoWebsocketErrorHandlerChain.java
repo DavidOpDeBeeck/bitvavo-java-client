@@ -1,5 +1,7 @@
 package be.davidopdebeeck.bitvavo.client.websocket.handler.error;
 
+import be.davidopdebeeck.bitvavo.client.response.BitvavoErrorMessage;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,19 +23,11 @@ public class BitvavoWebsocketErrorHandlerChain {
         this.handlers.add(handler);
     }
 
-    public void handle(Throwable throwable) {
+    public void handle(BitvavoErrorMessage errorMessage) {
         if (handlers.isEmpty()) {
-            DEFAULT_LOGGING_ERROR_HANDLER.handle(throwable);
+            DEFAULT_LOGGING_ERROR_HANDLER.handle(errorMessage);
         } else {
-            handlers.forEach(handler -> handler.handle(throwable));
-        }
-    }
-
-    public void handle(String errorCode, String errorMessage) {
-        if (handlers.isEmpty()) {
-            DEFAULT_LOGGING_ERROR_HANDLER.handle(errorCode, errorMessage);
-        } else {
-            handlers.forEach(handler -> handler.handle(errorCode, errorMessage));
+            handlers.forEach(handler -> handler.handle(errorMessage));
         }
     }
 }

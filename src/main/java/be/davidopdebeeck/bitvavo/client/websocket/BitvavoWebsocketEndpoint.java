@@ -3,6 +3,8 @@ package be.davidopdebeeck.bitvavo.client.websocket;
 import be.davidopdebeeck.bitvavo.client.BitvavoClientConfiguration;
 import be.davidopdebeeck.bitvavo.client.api.authenticate.BitvavoAuthenticateRequest;
 import be.davidopdebeeck.bitvavo.client.api.authenticate.BitvavoAuthenticateResponse;
+import be.davidopdebeeck.bitvavo.client.response.BitvavoErrorMessage;
+import be.davidopdebeeck.bitvavo.client.response.BitvavoResponseParser;
 import be.davidopdebeeck.bitvavo.client.websocket.handler.error.BitvavoWebsocketErrorHandler;
 import be.davidopdebeeck.bitvavo.client.websocket.handler.error.BitvavoWebsocketErrorHandlerRegistry;
 import be.davidopdebeeck.bitvavo.client.websocket.handler.event.BitvavoWebsocketEventHandler;
@@ -15,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.websocket.*;
 
+import static be.davidopdebeeck.bitvavo.client.response.BitvavoErrorMessage.fromException;
 import static be.davidopdebeeck.bitvavo.client.utils.RetryUtils.retryUntilTrue;
 import static be.davidopdebeeck.bitvavo.client.utils.SignatureUtils.createSignature;
 import static java.lang.String.valueOf;
@@ -30,6 +33,7 @@ public class BitvavoWebsocketEndpoint {
     private final BitvavoClientConfiguration configuration;
     private final BitvavoWebsocketEventHandlerRegistry eventHandlerRegistry;
     private final BitvavoWebsocketErrorHandlerRegistry errorHandlerRegistry;
+    private final BitvavoResponseParser<BitvavoWebsocketMessage> responseFactory;
 
     private Session session;
     private boolean authenticated = false;
@@ -38,6 +42,9 @@ public class BitvavoWebsocketEndpoint {
         this.configuration = requireNonNull(configuration);
         this.eventHandlerRegistry = new BitvavoWebsocketEventHandlerRegistry();
         this.errorHandlerRegistry = new BitvavoWebsocketErrorHandlerRegistry();
+        this.responseFactory = new BitvavoResponseParser.Builder<>(BitvavoWebsocketMessage.class)
+            .withObjectMapper(configuration.getObjectMapper())
+            .build();
     }
 
     @OnOpen
@@ -49,34 +56,23 @@ public class BitvavoWebsocketEndpoint {
     @OnMessage
     public void processMessage(String response) {
         LOGGER.debug("Received websocket message: {}", response);
-        JsonNode responseNode = convertToJsonNode(response);
 
-        JsonNode errorCodeNode = responseNode.get("errorCode");
-        if (errorCodeNode != null) {
-            String errorCode = errorCodeNode.asText();
-            String errorMessage = responseNode.get("error").asText();
-            errorHandlerRegistry.findErrorHandlerChain().handle(errorCode, errorMessage);
-            return;
-        }
+        responseFactory.parseResponse(response)
+            .handle(this::handleResult, this::handleError);
+    }
 
-        JsonNode eventNode = responseNode.get("event");
-        if (eventNode != null) {
-            String eventName = eventNode.asText();
-            eventHandlerRegistry.findEventHandlerChainBy(eventName).handle(response);
-            return;
-        }
+    private void handleResult(BitvavoWebsocketMessage message) {
+        eventHandlerRegistry.findEventHandlerChainBy(message.getMessageIdentifier())
+            .handle(message.getMessageBody());
+    }
 
-        JsonNode actionNode = responseNode.get("action");
-        if (actionNode != null) {
-            String actionName = actionNode.asText();
-            String nestedResponse = responseNode.get("response").toString();
-            eventHandlerRegistry.findEventHandlerChainBy(actionName).handle(nestedResponse);
-        }
+    private void handleError(BitvavoErrorMessage errorMessage) {
+        errorHandlerRegistry.findErrorHandlerChain().handle(errorMessage);
     }
 
     @OnError
     public void processError(Throwable throwable) {
-        errorHandlerRegistry.findErrorHandlerChain().handle(throwable);
+        errorHandlerRegistry.findErrorHandlerChain().handle(fromException(throwable));
     }
 
     public void doRequest(BitvavoWebsocketRequest websocketRequest) {
@@ -119,7 +115,9 @@ public class BitvavoWebsocketEndpoint {
         registerHandler(AUTHENTICATE, new BitvavoWebsocketEventHandler.Builder<>(BitvavoAuthenticateResponse.class)
             .withOneTimeUse(true)
             .withObjectMapper(configuration.getObjectMapper())
-            .withResponseHandler(response -> authenticated = response.asType().isAuthenticated())
+            .withResponseHandler(response -> authenticated = response
+                .map(BitvavoAuthenticateResponse::isAuthenticated)
+                .orElse(error -> false))
             .build());
 
         doRequest(new BitvavoWebsocketRequest.Builder()
