@@ -67,7 +67,7 @@ public class Example {
     * [x] Get order
     * [x] Get orders
     * [ ] Cancel orders
-    * [ ] Get open orders
+    * [x] Get open orders
 * Trades
     * [x] Get trades
 * Account
