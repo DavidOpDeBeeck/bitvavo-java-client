@@ -29,8 +29,8 @@ public class Example {
     BitvavoClient client = new BitvavoClient(configuration);
     BitvavoHttpClient httpClient = client.httpClient();
 
-    System.out.println(httpClient.time().asType().getTime());
-    System.out.println(httpClient.marketBook(market(BTC, EUR)).asString());
+    System.out.println(httpClient.time().getOrThrow().getTime());
+    System.out.println(httpClient.marketBook(market(BTC, EUR)).getOrThrow());
   }
 }
 ```
