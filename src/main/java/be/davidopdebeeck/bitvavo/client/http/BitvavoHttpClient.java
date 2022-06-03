@@ -23,6 +23,9 @@ import be.davidopdebeeck.bitvavo.client.api.market.trades.BitvavoMarketTradesReq
 import be.davidopdebeeck.bitvavo.client.api.market.trades.BitvavoMarketTradesResponse;
 import be.davidopdebeeck.bitvavo.client.api.markets.BitvavoMarketsRequest;
 import be.davidopdebeeck.bitvavo.client.api.markets.BitvavoMarketsResponse;
+import be.davidopdebeeck.bitvavo.client.api.order.BitvavoOrderRequest;
+import be.davidopdebeeck.bitvavo.client.api.order.BitvavoOrderResponse;
+import be.davidopdebeeck.bitvavo.client.api.orders.BitvavoOrdersRequest;
 import be.davidopdebeeck.bitvavo.client.api.ticker24h.BitvavoTicker24hRequest;
 import be.davidopdebeeck.bitvavo.client.api.ticker24h.BitvavoTicker24hResponse;
 import be.davidopdebeeck.bitvavo.client.api.tickerbook.BitvavoTickerBookRequest;
@@ -188,6 +191,22 @@ public class BitvavoHttpClient {
             .build();
 
         return doRequest(createGETRequest(uri), BitvavoTicker24hResponse.class);
+    }
+
+    public BitvavoResponse<BitvavoOrderResponse> order(BitvavoOrderRequest request) {
+        URI uri = createURI("/order")
+            .withQueryParameters(convertToMap(request))
+            .build();
+
+        return doRequest(createGETRequest(uri), BitvavoOrderResponse.class);
+    }
+
+    public BitvavoResponse<BitvavoOrderResponse[]> orders(BitvavoOrdersRequest request) {
+        URI uri = createURI("/orders")
+            .withQueryParameters(convertToMap(request))
+            .build();
+
+        return doRequest(createGETRequest(uri), BitvavoOrderResponse[].class);
     }
 
     public BitvavoResponse<BitvavoMarketTradesResponse> trades(BitvavoTradesRequest request) {

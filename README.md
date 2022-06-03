@@ -17,8 +17,8 @@ import static be.davidopdebeeck.bitvavo.client.api.market.BitvavoMarket.market;
 
 public class Example {
 
-  public static void main(String[] args) {
-    BitvavoClientConfiguration configuration = new BitvavoClientConfiguration.Builder()
+    public static void main(String[] args) {
+        BitvavoClientConfiguration configuration = new BitvavoClientConfiguration.Builder()
             .withApiKey("<apiKey>")
             .withApiSecret("<apiSecret>>")
             .withRestUrl("https://api.bitvavo.com/v2/")
@@ -26,18 +26,18 @@ public class Example {
             .withAccessWindow(10000)
             .build();
 
-    BitvavoClient client = new BitvavoClient(configuration);
-    BitvavoHttpClient httpClient = client.httpClient();
+        BitvavoClient client = new BitvavoClient(configuration);
+        BitvavoHttpClient httpClient = client.httpClient();
 
-    System.out.println(httpClient.time().getOrThrow().getTime());
-    System.out.println(httpClient.marketBook(market(BTC, EUR)).getOrThrow());
-  }
+        System.out.println(httpClient.time().getOrThrow().getTime());
+        System.out.println(httpClient.marketBook(market(BTC, EUR)).getOrThrow());
+    }
 }
 ```
 
 ### TODOs
 
-* [ ] Implement all endpoints 
+* [ ] Implement all endpoints
     * [ ] for the BitvavoHttpClient
     * [ ] for the BitvavoWebsocketClient
 * [ ] Implement rate limiting
@@ -64,8 +64,8 @@ public class Example {
     * [ ] New order
     * [ ] Update order
     * [ ] Cancel order
-    * [ ] Get order
-    * [ ] Get orders
+    * [x] Get order
+    * [x] Get orders
     * [ ] Cancel orders
     * [ ] Get open orders
 * Trades
