@@ -3,8 +3,6 @@ package be.davidopdebeeck.bitvavo.client.response;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Map;
-
 import static be.davidopdebeeck.bitvavo.client.response.BitvavoErrorMessage.fromException;
 import static be.davidopdebeeck.bitvavo.client.response.BitvavoResponse.error;
 import static be.davidopdebeeck.bitvavo.client.response.BitvavoResponse.ok;
@@ -33,14 +31,6 @@ public class BitvavoResponseParser<T> {
                     .build());
             }
             return ok(objectMapper.convertValue(responseNode, responseTypeClass));
-        } catch (Exception exception) {
-            return error(fromException(exception));
-        }
-    }
-
-    public BitvavoResponse<T> createWebsocketResponse(Map<String, Object> responseAsMap) {
-        try {
-            return ok(objectMapper.convertValue(responseAsMap, responseTypeClass));
         } catch (Exception exception) {
             return error(fromException(exception));
         }

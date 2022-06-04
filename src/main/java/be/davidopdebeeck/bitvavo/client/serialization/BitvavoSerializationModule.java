@@ -19,6 +19,8 @@ import be.davidopdebeeck.bitvavo.client.serialization.instant.InstantSerializer;
 import be.davidopdebeeck.bitvavo.client.serialization.market.BitvavoMarketDeserializer;
 import be.davidopdebeeck.bitvavo.client.serialization.market.BitvavoMarketSerializer;
 import be.davidopdebeeck.bitvavo.client.serialization.subscription.BitvavoTicker24hSubscriptionResponseDeserializer;
+import be.davidopdebeeck.bitvavo.client.serialization.websocket.BitvavoWebsocketMessageDeserializer;
+import be.davidopdebeeck.bitvavo.client.websocket.BitvavoWebsocketMessage;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -65,6 +67,8 @@ public class BitvavoSerializationModule {
             .addDeserializer(BitvavoMarketCandlesResponse.class, new BitvavoMarketCandlesResponseDeserializer())
             // subscription
             .addDeserializer(BitvavoTicker24hSubscriptionResponse.class, new BitvavoTicker24hSubscriptionResponseDeserializer())
+            // websocket
+            .addDeserializer(BitvavoWebsocketMessage.class, new BitvavoWebsocketMessageDeserializer())
             ;
     }
 }

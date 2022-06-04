@@ -13,6 +13,8 @@ import be.davidopdebeeck.bitvavo.client.api.market.trades.BitvavoMarketTradesReq
 import be.davidopdebeeck.bitvavo.client.api.market.trades.BitvavoMarketTradesResponse;
 import be.davidopdebeeck.bitvavo.client.api.markets.BitvavoMarketsRequest;
 import be.davidopdebeeck.bitvavo.client.api.markets.BitvavoMarketsResponse;
+import be.davidopdebeeck.bitvavo.client.api.order.BitvavoOrderResponse;
+import be.davidopdebeeck.bitvavo.client.api.orders.BitvavoOrdersRequest;
 import be.davidopdebeeck.bitvavo.client.api.subscription.BitvavoChannelSubscriptionRequest;
 import be.davidopdebeeck.bitvavo.client.api.subscription.BitvavoSubscriptionRequest;
 import be.davidopdebeeck.bitvavo.client.api.subscription.account.BitvavoAccountFillSubscriptionResponse;
@@ -52,6 +54,7 @@ public class BitvavoWebsocketClient {
     private static final String GET_ASSETS = "getAssets";
     private static final String GET_MARKETS = "getMarkets";
     private static final String GET_TIME = "getTime";
+    private static final String GET_ORDERS = "privateGetOrders";
     private static final String SUBSCRIBE = "subscribe";
     private static final String TICKER = "ticker";
     private static final String TICKER_24H = "ticker24h";
@@ -182,6 +185,11 @@ public class BitvavoWebsocketClient {
     public void ticker24h(BitvavoTicker24hRequest request, BitvavoResponseHandler<BitvavoTicker24hResponse> handler) {
         websocketEndpoint.registerHandler(GET_TICKER_24H, createOneTimeUseHandler(handler, BitvavoTicker24hResponse.class));
         websocketEndpoint.doRequest(createRequest(GET_TICKER_24H, request));
+    }
+
+    public void orders(BitvavoOrdersRequest request, BitvavoResponseHandler<BitvavoOrderResponse[]> handler) {
+        websocketEndpoint.registerHandler(GET_ORDERS, createOneTimeUseHandler(handler, BitvavoOrderResponse[].class));
+        websocketEndpoint.doRequest(createRequest(GET_ORDERS, request));
     }
 
     public void tickerSubscription(BitvavoMarket market, BitvavoResponseHandler<BitvavoTickerSubscriptionResponse> handler) {

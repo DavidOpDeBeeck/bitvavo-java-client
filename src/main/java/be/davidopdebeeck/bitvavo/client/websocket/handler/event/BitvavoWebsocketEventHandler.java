@@ -1,41 +1,27 @@
 package be.davidopdebeeck.bitvavo.client.websocket.handler.event;
 
-import be.davidopdebeeck.bitvavo.client.response.BitvavoResponse;
 import be.davidopdebeeck.bitvavo.client.response.BitvavoResponseHandler;
+import be.davidopdebeeck.bitvavo.client.response.BitvavoResponseParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Map;
-
-import static be.davidopdebeeck.bitvavo.client.response.BitvavoErrorMessage.fromException;
-import static be.davidopdebeeck.bitvavo.client.response.BitvavoResponse.error;
-import static be.davidopdebeeck.bitvavo.client.response.BitvavoResponse.ok;
 import static java.util.Objects.requireNonNull;
 
 public class BitvavoWebsocketEventHandler<T> {
 
     private final boolean oneTimeUse;
-    private final Class<T> responseClass;
-    private final ObjectMapper objectMapper;
     private final BitvavoResponseHandler<T> responseHandler;
+    private final BitvavoResponseParser<T> responseParser;
 
     private BitvavoWebsocketEventHandler(Builder<T> builder) {
         oneTimeUse = requireNonNull(builder.oneTimeUse);
-        responseClass = requireNonNull(builder.responseClass);
-        objectMapper = requireNonNull(builder.objectMapper);
         responseHandler = requireNonNull(builder.responseHandler);
+        responseParser = new BitvavoResponseParser.Builder<>(builder.responseClass)
+            .withObjectMapper(builder.objectMapper)
+            .build();
     }
 
-    public void handle(Map<String, Object> responseAsMap) {
-        responseHandler.handle(createResponse(responseAsMap));
-    }
-
-    private BitvavoResponse<T> createResponse(Map<String, Object> responseAsMap) {
-        try {
-            T response = objectMapper.convertValue(responseAsMap, responseClass);
-            return ok(response);
-        } catch (Exception exception) {
-            return error(fromException(exception));
-        }
+    public void handle(String responseAsString) {
+        responseHandler.handle(responseParser.parseResponse(responseAsString));
     }
 
     public boolean isOneTimeUse() {
