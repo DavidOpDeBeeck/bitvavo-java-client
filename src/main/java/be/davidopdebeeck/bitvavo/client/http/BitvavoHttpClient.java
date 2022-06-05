@@ -25,6 +25,9 @@ import be.davidopdebeeck.bitvavo.client.api.markets.BitvavoMarketsRequest;
 import be.davidopdebeeck.bitvavo.client.api.markets.BitvavoMarketsResponse;
 import be.davidopdebeeck.bitvavo.client.api.order.BitvavoOrderRequest;
 import be.davidopdebeeck.bitvavo.client.api.order.BitvavoOrderResponse;
+import be.davidopdebeeck.bitvavo.client.api.order.cancelorder.BitvavoCancelOrderRequest;
+import be.davidopdebeeck.bitvavo.client.api.order.cancelorder.BitvavoCancelOrderResponse;
+import be.davidopdebeeck.bitvavo.client.api.order.cancelorder.BitvavoCancelOrdersRequest;
 import be.davidopdebeeck.bitvavo.client.api.order.neworder.BitvavoNewOrderRequest;
 import be.davidopdebeeck.bitvavo.client.api.order.updateorder.BitvavoUpdateOrderRequest;
 import be.davidopdebeeck.bitvavo.client.api.orders.BitvavoOrdersOpenRequest;
@@ -208,6 +211,22 @@ public class BitvavoHttpClient {
         return doRequest(createPUTRequest(uri, request), BitvavoOrderResponse.class);
     }
 
+    public BitvavoResponse<BitvavoCancelOrderResponse> cancelOrder(BitvavoCancelOrderRequest request) {
+        URI uri = createURI("/order")
+            .withQueryParameters(convertToMap(request))
+            .build();
+
+        return doRequest(createDELETERequest(uri), BitvavoCancelOrderResponse.class);
+    }
+
+    public BitvavoResponse<BitvavoCancelOrderResponse[]> cancelOrders(BitvavoCancelOrdersRequest request) {
+        URI uri = createURI("/orders")
+            .withQueryParameters(convertToMap(request))
+            .build();
+
+        return doRequest(createDELETERequest(uri), BitvavoCancelOrderResponse[].class);
+    }
+
     public BitvavoResponse<BitvavoOrderResponse> order(BitvavoOrderRequest request) {
         URI uri = createURI("/order")
             .withQueryParameters(convertToMap(request))
@@ -362,6 +381,14 @@ public class BitvavoHttpClient {
             .withMethod("PUT")
             .withConfiguration(configuration)
             .withBody(body)
+            .build();
+    }
+
+    private BitvavoHttpRequest createDELETERequest(URI uri) {
+        return new BitvavoHttpRequest.Builder()
+            .withUri(uri)
+            .withMethod("DELETE")
+            .withConfiguration(configuration)
             .build();
     }
 
