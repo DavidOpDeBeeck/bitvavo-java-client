@@ -7,6 +7,7 @@ import be.davidopdebeeck.bitvavo.client.api.market.book.BitvavoBid;
 import be.davidopdebeeck.bitvavo.client.api.market.candles.BitvavoCandle;
 import be.davidopdebeeck.bitvavo.client.api.market.candles.BitvavoMarketCandlesResponse;
 import be.davidopdebeeck.bitvavo.client.api.subscription.ticker24h.BitvavoTicker24hSubscriptionResponse;
+import be.davidopdebeeck.bitvavo.client.response.BitvavoResponse;
 import be.davidopdebeeck.bitvavo.client.serialization.asset.BitvavoAssetSymbolDeserializer;
 import be.davidopdebeeck.bitvavo.client.serialization.asset.BitvavoAssetSymbolSerializer;
 import be.davidopdebeeck.bitvavo.client.serialization.bigdecimal.BigDecimalSerializer;
@@ -19,6 +20,7 @@ import be.davidopdebeeck.bitvavo.client.serialization.instant.InstantSerializer;
 import be.davidopdebeeck.bitvavo.client.serialization.market.BitvavoMarketDeserializer;
 import be.davidopdebeeck.bitvavo.client.serialization.market.BitvavoMarketSerializer;
 import be.davidopdebeeck.bitvavo.client.serialization.subscription.BitvavoTicker24hSubscriptionResponseDeserializer;
+import be.davidopdebeeck.bitvavo.client.serialization.websocket.BitvavoResponseDeserializer;
 import be.davidopdebeeck.bitvavo.client.serialization.websocket.BitvavoWebsocketMessageDeserializer;
 import be.davidopdebeeck.bitvavo.client.websocket.BitvavoWebsocketMessage;
 import com.fasterxml.jackson.databind.Module;
@@ -69,6 +71,8 @@ public class BitvavoSerializationModule {
             .addDeserializer(BitvavoTicker24hSubscriptionResponse.class, new BitvavoTicker24hSubscriptionResponseDeserializer())
             // websocket
             .addDeserializer(BitvavoWebsocketMessage.class, new BitvavoWebsocketMessageDeserializer())
+            // response
+            .addDeserializer(BitvavoResponse.class, new BitvavoResponseDeserializer())
             ;
     }
 }

@@ -1,39 +1,34 @@
 package be.davidopdebeeck.bitvavo.client.response;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static be.davidopdebeeck.bitvavo.client.response.BitvavoErrorMessage.fromException;
 import static be.davidopdebeeck.bitvavo.client.response.BitvavoResponse.error;
-import static be.davidopdebeeck.bitvavo.client.response.BitvavoResponse.ok;
 import static java.util.Objects.requireNonNull;
 
 public class BitvavoResponseParser<T> {
 
-    private static final String ERROR_CODE_FIELD_NAME = "errorCode";
-    private static final String ERROR_MESSAGE_FIELD_NAME = "error";
-
+    private final JavaType responseType;
     private final ObjectMapper objectMapper;
-    private final Class<T> responseTypeClass;
 
     private BitvavoResponseParser(Builder<T> builder) {
-        objectMapper = requireNonNull(builder.objectMapper);
-        responseTypeClass = requireNonNull(builder.responseTypeClass);
+        this.objectMapper = requireNonNull(builder.objectMapper);
+        this.responseType = createResponseType(builder);
     }
 
     public BitvavoResponse<T> parseResponse(String responseAsString) {
         try {
-            JsonNode responseNode = objectMapper.readTree(responseAsString);
-            if (responseNode.has(ERROR_CODE_FIELD_NAME)) {
-                return error(new BitvavoErrorMessage.Builder()
-                    .withErrorCode(responseNode.get(ERROR_CODE_FIELD_NAME).asText())
-                    .withErrorMessage(responseNode.get(ERROR_MESSAGE_FIELD_NAME).asText())
-                    .build());
-            }
-            return ok(objectMapper.convertValue(responseNode, responseTypeClass));
-        } catch (Exception exception) {
+            return objectMapper.readValue(responseAsString, responseType);
+        } catch (JsonProcessingException exception) {
             return error(fromException(exception));
         }
+    }
+
+    private JavaType createResponseType(Builder<T> builder) {
+        return builder.objectMapper.getTypeFactory()
+            .constructParametricType(BitvavoResponse.class, builder.responseTypeClass);
     }
 
     public static final class Builder<T> {

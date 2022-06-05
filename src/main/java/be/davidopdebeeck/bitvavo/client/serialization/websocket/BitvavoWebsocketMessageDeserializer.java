@@ -26,12 +26,13 @@ public class BitvavoWebsocketMessageDeserializer extends JsonDeserializer<Bitvav
 
         JsonNode actionNode = node.get("action");
         if (actionNode != null) {
+            JsonNode responseNode = node.get("response");
             return new BitvavoWebsocketMessage.Builder()
                 .withIdentifier(actionNode.textValue())
-                .withBody(node.get("response").toString())
+                .withBody(responseNode == null ? node.toString() : node.get("response").toString())
                 .build();
         }
 
-        throw new IllegalArgumentException(format("%s could not be deserialized to a valid BitvavoWebsocketMessage, only 'event' or 'action' are supported", node.toString()));
+        throw new IllegalArgumentException(format("%s could not be deserialized to a valid BitvavoWebsocketMessage, only 'event' or 'action' are supported", node));
     }
 }
