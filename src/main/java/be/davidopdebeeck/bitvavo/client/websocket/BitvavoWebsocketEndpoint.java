@@ -42,6 +42,7 @@ public class BitvavoWebsocketEndpoint {
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
+        // TODO: authentication is only needed for "private" endpoints
         authenticate();
     }
 
