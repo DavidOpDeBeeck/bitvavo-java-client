@@ -25,6 +25,7 @@ import be.davidopdebeeck.bitvavo.client.api.markets.BitvavoMarketsRequest;
 import be.davidopdebeeck.bitvavo.client.api.markets.BitvavoMarketsResponse;
 import be.davidopdebeeck.bitvavo.client.api.order.BitvavoOrderRequest;
 import be.davidopdebeeck.bitvavo.client.api.order.BitvavoOrderResponse;
+import be.davidopdebeeck.bitvavo.client.api.order.neworder.BitvavoNewOrderRequest;
 import be.davidopdebeeck.bitvavo.client.api.orders.BitvavoOrdersOpenRequest;
 import be.davidopdebeeck.bitvavo.client.api.orders.BitvavoOrdersRequest;
 import be.davidopdebeeck.bitvavo.client.api.ticker24h.BitvavoTicker24hRequest;
@@ -192,6 +193,13 @@ public class BitvavoHttpClient {
             .build();
 
         return doRequest(createGETRequest(uri), BitvavoTicker24hResponse.class);
+    }
+
+    public BitvavoResponse<BitvavoOrderResponse> newOrder(BitvavoNewOrderRequest request) {
+        URI uri = createURI("/order")
+            .build();
+
+        return doRequest(createPOSTRequest(uri, request), BitvavoOrderResponse.class);
     }
 
     public BitvavoResponse<BitvavoOrderResponse> order(BitvavoOrderRequest request) {
