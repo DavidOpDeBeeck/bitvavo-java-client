@@ -61,7 +61,7 @@ public class Example {
     * [x] Ticker Book
     * [x] Ticker 24h
 * Orders
-    * [ ] New order
+    * [x] New order
     * [ ] Update order
     * [ ] Cancel order
     * [x] Get order
