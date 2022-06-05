@@ -13,8 +13,13 @@ import be.davidopdebeeck.bitvavo.client.api.market.trades.BitvavoMarketTradesReq
 import be.davidopdebeeck.bitvavo.client.api.market.trades.BitvavoMarketTradesResponse;
 import be.davidopdebeeck.bitvavo.client.api.markets.BitvavoMarketsRequest;
 import be.davidopdebeeck.bitvavo.client.api.markets.BitvavoMarketsResponse;
+import be.davidopdebeeck.bitvavo.client.api.order.BitvavoOrderRequest;
 import be.davidopdebeeck.bitvavo.client.api.order.BitvavoOrderResponse;
+import be.davidopdebeeck.bitvavo.client.api.order.cancelorder.BitvavoCancelOrderRequest;
+import be.davidopdebeeck.bitvavo.client.api.order.cancelorder.BitvavoCancelOrderResponse;
+import be.davidopdebeeck.bitvavo.client.api.order.cancelorder.BitvavoCancelOrdersRequest;
 import be.davidopdebeeck.bitvavo.client.api.order.neworder.BitvavoNewOrderRequest;
+import be.davidopdebeeck.bitvavo.client.api.order.updateorder.BitvavoUpdateOrderRequest;
 import be.davidopdebeeck.bitvavo.client.api.orders.BitvavoOrdersRequest;
 import be.davidopdebeeck.bitvavo.client.api.subscription.BitvavoChannelSubscriptionRequest;
 import be.davidopdebeeck.bitvavo.client.api.subscription.BitvavoSubscriptionRequest;
@@ -55,8 +60,13 @@ public class BitvavoWebsocketClient {
     private static final String GET_ASSETS = "getAssets";
     private static final String GET_MARKETS = "getMarkets";
     private static final String GET_TIME = "getTime";
+    private static final String GET_ORDER = "privateGetOrder";
     private static final String GET_ORDERS = "privateGetOrders";
-    private static final String CREATE_ORDERS = "privateCreateOrder";
+    private static final String GET_ORDERS_OPEN = "privateGetOrdersOpen";
+    private static final String CREATE_ORDER = "privateCreateOrder";
+    private static final String UPDATE_ORDER = "privateUpdateOrder";
+    private static final String CANCEL_ORDER = "privateCancelOrder";
+    private static final String CANCEL_ORDERS = "privateCancelOrders";
     private static final String SUBSCRIBE = "subscribe";
     private static final String TICKER = "ticker";
     private static final String TICKER_24H = "ticker24h";
@@ -190,13 +200,38 @@ public class BitvavoWebsocketClient {
     }
 
     public void newOrder(BitvavoNewOrderRequest request, BitvavoResponseHandler<BitvavoOrderResponse> handler) {
-        websocketEndpoint.registerHandler(CREATE_ORDERS, createOneTimeUseHandler(handler, BitvavoOrderResponse.class));
-        websocketEndpoint.doRequest(createRequest(CREATE_ORDERS, request));
+        websocketEndpoint.registerHandler(CREATE_ORDER, createOneTimeUseHandler(handler, BitvavoOrderResponse.class));
+        websocketEndpoint.doRequest(createRequest(CREATE_ORDER, request));
+    }
+
+    public void updateOrder(BitvavoUpdateOrderRequest request, BitvavoResponseHandler<BitvavoOrderResponse> handler) {
+        websocketEndpoint.registerHandler(UPDATE_ORDER, createOneTimeUseHandler(handler, BitvavoOrderResponse.class));
+        websocketEndpoint.doRequest(createRequest(UPDATE_ORDER, request));
+    }
+
+    public void cancelOrder(BitvavoCancelOrderRequest request, BitvavoResponseHandler<BitvavoCancelOrderResponse> handler) {
+        websocketEndpoint.registerHandler(CANCEL_ORDER, createOneTimeUseHandler(handler, BitvavoCancelOrderResponse.class));
+        websocketEndpoint.doRequest(createRequest(CANCEL_ORDER, request));
+    }
+
+    public void order(BitvavoOrderRequest request, BitvavoResponseHandler<BitvavoOrderResponse> handler) {
+        websocketEndpoint.registerHandler(GET_ORDER, createOneTimeUseHandler(handler, BitvavoOrderResponse.class));
+        websocketEndpoint.doRequest(createRequest(GET_ORDER, request));
     }
 
     public void orders(BitvavoOrdersRequest request, BitvavoResponseHandler<BitvavoOrderResponse[]> handler) {
         websocketEndpoint.registerHandler(GET_ORDERS, createOneTimeUseHandler(handler, BitvavoOrderResponse[].class));
         websocketEndpoint.doRequest(createRequest(GET_ORDERS, request));
+    }
+
+    public void cancelOrders(BitvavoCancelOrdersRequest request, BitvavoResponseHandler<BitvavoCancelOrderResponse[]> handler) {
+        websocketEndpoint.registerHandler(CANCEL_ORDERS, createOneTimeUseHandler(handler, BitvavoCancelOrderResponse[].class));
+        websocketEndpoint.doRequest(createRequest(CANCEL_ORDERS, request));
+    }
+
+    public void ordersOpen(BitvavoOrdersRequest request, BitvavoResponseHandler<BitvavoOrderResponse[]> handler) {
+        websocketEndpoint.registerHandler(GET_ORDERS_OPEN, createOneTimeUseHandler(handler, BitvavoOrderResponse[].class));
+        websocketEndpoint.doRequest(createRequest(GET_ORDERS_OPEN, request));
     }
 
     public void tickerSubscription(BitvavoMarket market, BitvavoResponseHandler<BitvavoTickerSubscriptionResponse> handler) {
