@@ -37,9 +37,9 @@ public class Example {
 
 ### TODOs
 
-* [ ] Implement all endpoints
-    * [ ] for the BitvavoHttpClient
-    * [ ] for the BitvavoWebsocketClient
+* [x] Implement all endpoints
+    * [x] for the BitvavoHttpClient
+    * [x] for the BitvavoWebsocketClient
 * [ ] Implement rate limiting
     * [ ] for the BitvavoHttpClient
     * [ ] for the BitvavoWebsocketClient
