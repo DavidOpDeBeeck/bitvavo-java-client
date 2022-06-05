@@ -26,6 +26,7 @@ import be.davidopdebeeck.bitvavo.client.api.markets.BitvavoMarketsResponse;
 import be.davidopdebeeck.bitvavo.client.api.order.BitvavoOrderRequest;
 import be.davidopdebeeck.bitvavo.client.api.order.BitvavoOrderResponse;
 import be.davidopdebeeck.bitvavo.client.api.order.neworder.BitvavoNewOrderRequest;
+import be.davidopdebeeck.bitvavo.client.api.order.updateorder.BitvavoUpdateOrderRequest;
 import be.davidopdebeeck.bitvavo.client.api.orders.BitvavoOrdersOpenRequest;
 import be.davidopdebeeck.bitvavo.client.api.orders.BitvavoOrdersRequest;
 import be.davidopdebeeck.bitvavo.client.api.ticker24h.BitvavoTicker24hRequest;
@@ -40,8 +41,6 @@ import be.davidopdebeeck.bitvavo.client.api.withdrawal.BitvavoWithdrawalRequest;
 import be.davidopdebeeck.bitvavo.client.api.withdrawal.BitvavoWithdrawalResponse;
 import be.davidopdebeeck.bitvavo.client.api.withdrawalhistory.BitvavoWithdrawalHistoryRequest;
 import be.davidopdebeeck.bitvavo.client.api.withdrawalhistory.BitvavoWithdrawalHistoryResponse;
-import be.davidopdebeeck.bitvavo.client.http.request.BitvavoHttpGETRequest;
-import be.davidopdebeeck.bitvavo.client.http.request.BitvavoHttpPOSTRequest;
 import be.davidopdebeeck.bitvavo.client.http.request.BitvavoHttpRequest;
 import be.davidopdebeeck.bitvavo.client.response.BitvavoResponse;
 import be.davidopdebeeck.bitvavo.client.response.BitvavoResponseParser;
@@ -202,6 +201,13 @@ public class BitvavoHttpClient {
         return doRequest(createPOSTRequest(uri, request), BitvavoOrderResponse.class);
     }
 
+    public BitvavoResponse<BitvavoOrderResponse> updateOrder(BitvavoUpdateOrderRequest request) {
+        URI uri = createURI("/order")
+            .build();
+
+        return doRequest(createPUTRequest(uri, request), BitvavoOrderResponse.class);
+    }
+
     public BitvavoResponse<BitvavoOrderResponse> order(BitvavoOrderRequest request) {
         URI uri = createURI("/order")
             .withQueryParameters(convertToMap(request))
@@ -334,15 +340,26 @@ public class BitvavoHttpClient {
     }
 
     private BitvavoHttpRequest createGETRequest(URI uri) {
-        return new BitvavoHttpGETRequest.Builder()
+        return new BitvavoHttpRequest.Builder()
             .withUri(uri)
+            .withMethod("GET")
             .withConfiguration(configuration)
             .build();
     }
 
     private BitvavoHttpRequest createPOSTRequest(URI uri, Object body) {
-        return new BitvavoHttpPOSTRequest.Builder()
+        return new BitvavoHttpRequest.Builder()
             .withUri(uri)
+            .withMethod("POST")
+            .withConfiguration(configuration)
+            .withBody(body)
+            .build();
+    }
+
+    private BitvavoHttpRequest createPUTRequest(URI uri, Object body) {
+        return new BitvavoHttpRequest.Builder()
+            .withUri(uri)
+            .withMethod("PUT")
             .withConfiguration(configuration)
             .withBody(body)
             .build();
