@@ -4,7 +4,7 @@ import static java.lang.Thread.sleep;
 
 public class ThreadUtils {
 
-    public static void waitForMillis(int millis) {
+    public static void waitForMillis(long millis) {
         try {
             sleep(millis);
         } catch (InterruptedException e) {

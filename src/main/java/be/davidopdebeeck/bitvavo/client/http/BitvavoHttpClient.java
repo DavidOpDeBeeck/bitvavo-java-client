@@ -73,6 +73,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoTimeResponse> time() {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("time")
             .build();
 
@@ -80,6 +82,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoMarketsResponse[]> markets() {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("markets")
             .build();
 
@@ -87,6 +91,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoMarketsResponse> markets(BitvavoMarketsRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("markets")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -95,6 +101,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoAssetsResponse[]> assets() {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("assets")
             .build();
 
@@ -102,6 +110,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoAssetsResponse> assets(BitvavoAssetsRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("assets")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -110,6 +120,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoMarketBookResponse> marketBook(BitvavoMarket market) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("{market}/book")
             .withPathVariable("market", market)
             .build();
@@ -118,6 +130,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoMarketBookResponse> marketBook(BitvavoMarket market, BitvavoMarketBookRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("{market}/book")
             .withPathVariable("market", market)
             .withQueryParameters(convertToMap(request))
@@ -127,6 +141,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoMarketTradesResponse[]> marketTrades(BitvavoMarket market) {
+        verifyActionCanBeExecuted(5);
+
         URI uri = createURI("{market}/trades")
             .withPathVariable("market", market)
             .build();
@@ -135,6 +151,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoMarketTradesResponse[]> marketTrades(BitvavoMarket market, BitvavoMarketTradesRequest request) {
+        verifyActionCanBeExecuted(5);
+
         URI uri = createURI("{market}/trades")
             .withPathVariable("market", market)
             .withQueryParameters(convertToMap(request))
@@ -144,6 +162,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoMarketCandlesResponse> marketCandles(BitvavoMarket market, BitvavoMarketCandlesRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("{market}/candles")
             .withPathVariable("market", market)
             .withQueryParameters(convertToMap(request))
@@ -153,6 +173,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoTickerPriceResponse[]> tickerPrice() {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("/ticker/price")
             .build();
 
@@ -160,6 +182,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoTickerPriceResponse> tickerPrice(BitvavoTickerPriceRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("/ticker/price")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -168,6 +192,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoTickerBookResponse[]> tickerBook() {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("/ticker/book")
             .build();
 
@@ -175,6 +201,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoTickerBookResponse> tickerBook(BitvavoTickerBookRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("/ticker/book")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -183,6 +211,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoTicker24hResponse[]> ticker24h() {
+        verifyActionCanBeExecuted(25);
+
         URI uri = createURI("/ticker/24h")
             .build();
 
@@ -190,6 +220,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoTicker24hResponse> ticker24h(BitvavoTicker24hRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("/ticker/24h")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -198,6 +230,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoOrderResponse> newOrder(BitvavoNewOrderRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("/order")
             .build();
 
@@ -205,6 +239,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoOrderResponse> updateOrder(BitvavoUpdateOrderRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("/order")
             .build();
 
@@ -212,6 +248,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoCancelOrderResponse> cancelOrder(BitvavoCancelOrderRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("/order")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -219,15 +257,9 @@ public class BitvavoHttpClient {
         return doRequest(createDELETERequest(uri), BitvavoCancelOrderResponse.class);
     }
 
-    public BitvavoResponse<BitvavoCancelOrderResponse[]> cancelOrders(BitvavoCancelOrdersRequest request) {
-        URI uri = createURI("/orders")
-            .withQueryParameters(convertToMap(request))
-            .build();
-
-        return doRequest(createDELETERequest(uri), BitvavoCancelOrderResponse[].class);
-    }
-
     public BitvavoResponse<BitvavoOrderResponse> order(BitvavoOrderRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("/order")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -236,6 +268,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoOrderResponse[]> orders(BitvavoOrdersRequest request) {
+        verifyActionCanBeExecuted(5);
+
         URI uri = createURI("/orders")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -243,7 +277,28 @@ public class BitvavoHttpClient {
         return doRequest(createGETRequest(uri), BitvavoOrderResponse[].class);
     }
 
+    public BitvavoResponse<BitvavoCancelOrderResponse[]> cancelOrders(BitvavoCancelOrdersRequest request) {
+        verifyActionCanBeExecuted(1);
+
+        URI uri = createURI("/orders")
+            .withQueryParameters(convertToMap(request))
+            .build();
+
+        return doRequest(createDELETERequest(uri), BitvavoCancelOrderResponse[].class);
+    }
+
+    public BitvavoResponse<BitvavoOrderResponse[]> ordersOpen() {
+        verifyActionCanBeExecuted(25);
+
+        URI uri = createURI("/ordersOpen")
+            .build();
+
+        return doRequest(createGETRequest(uri), BitvavoOrderResponse[].class);
+    }
+
     public BitvavoResponse<BitvavoOrderResponse[]> ordersOpen(BitvavoOrdersOpenRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("/ordersOpen")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -251,15 +306,19 @@ public class BitvavoHttpClient {
         return doRequest(createGETRequest(uri), BitvavoOrderResponse[].class);
     }
 
-    public BitvavoResponse<BitvavoMarketTradesResponse> trades(BitvavoTradesRequest request) {
+    public BitvavoResponse<BitvavoMarketTradesResponse[]> trades(BitvavoTradesRequest request) {
+        verifyActionCanBeExecuted(5);
+
         URI uri = createURI("/trades")
             .withQueryParameters(convertToMap(request))
             .build();
 
-        return doRequest(createGETRequest(uri), BitvavoMarketTradesResponse.class);
+        return doRequest(createGETRequest(uri), BitvavoMarketTradesResponse[].class);
     }
 
     public BitvavoResponse<BitvavoAccountResponse> account() {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("/account")
             .build();
 
@@ -267,6 +326,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoBalanceResponse[]> balance() {
+        verifyActionCanBeExecuted(5);
+
         URI uri = createURI("/balance")
             .build();
 
@@ -274,6 +335,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoBalanceResponse> balance(BitvavoBalanceRequest request) {
+        verifyActionCanBeExecuted(5);
+
         URI uri = createURI("/balance")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -282,6 +345,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoDepositResponse> deposit(BitvavoDepositRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("/deposit")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -290,6 +355,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoBankDepositResponse> bankDeposit(BitvavoDepositRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("/deposit")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -298,6 +365,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoDigitalAssetDepositResponse> digitalAssetDeposit(BitvavoDepositRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("/deposit")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -306,6 +375,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoDepositHistoryResponse[]> depositHistory() {
+        verifyActionCanBeExecuted(5);
+
         URI uri = createURI("/depositHistory")
             .build();
 
@@ -313,6 +384,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoDepositHistoryResponse[]> depositHistory(BitvavoDepositHistoryRequest request) {
+        verifyActionCanBeExecuted(5);
+
         URI uri = createURI("/depositHistory")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -320,7 +393,9 @@ public class BitvavoHttpClient {
         return doRequest(createGETRequest(uri), BitvavoDepositHistoryResponse[].class);
     }
 
-    public BitvavoResponse<BitvavoBankDepositHistoryResponse[]> bankDeposit(BitvavoDepositHistoryRequest request) {
+    public BitvavoResponse<BitvavoBankDepositHistoryResponse[]> bankDepositHistory(BitvavoDepositHistoryRequest request) {
+        verifyActionCanBeExecuted(5);
+
         URI uri = createURI("/depositHistory")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -328,15 +403,19 @@ public class BitvavoHttpClient {
         return doRequest(createGETRequest(uri), BitvavoBankDepositHistoryResponse[].class);
     }
 
-    public BitvavoResponse<BitvavoBankDepositHistoryResponse[]> digitalAssetDeposit(BitvavoDepositHistoryRequest request) {
+    public BitvavoResponse<BitvavoDigitalAssetDepositResponse[]> digitalAssetDepositHistory(BitvavoDepositHistoryRequest request) {
+        verifyActionCanBeExecuted(5);
+
         URI uri = createURI("/depositHistory")
             .withQueryParameters(convertToMap(request))
             .build();
 
-        return doRequest(createGETRequest(uri), BitvavoBankDepositHistoryResponse[].class);
+        return doRequest(createGETRequest(uri), BitvavoDigitalAssetDepositResponse[].class);
     }
 
     public BitvavoResponse<BitvavoWithdrawalResponse> withdrawal(BitvavoWithdrawalRequest request) {
+        verifyActionCanBeExecuted(1);
+
         URI uri = createURI("/withdrawal")
             .build();
 
@@ -344,6 +423,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoWithdrawalHistoryResponse[]> withdrawalHistory() {
+        verifyActionCanBeExecuted(5);
+
         URI uri = createURI("/withdrawalHistory")
             .build();
 
@@ -351,6 +432,8 @@ public class BitvavoHttpClient {
     }
 
     public BitvavoResponse<BitvavoWithdrawalHistoryResponse[]> withdrawalHistory(BitvavoWithdrawalHistoryRequest request) {
+        verifyActionCanBeExecuted(5);
+
         URI uri = createURI("/withdrawalHistory")
             .withQueryParameters(convertToMap(request))
             .build();
@@ -396,12 +479,17 @@ public class BitvavoHttpClient {
         try {
             BitvavoResponseParser<T> responseFactory = new BitvavoResponseParser.Builder<>(responseClassType)
                 .withObjectMapper(getObjectMapper())
+                .withRateLimiter(configuration.getRateLimiter())
                 .build();
 
-            return responseFactory.parseResponse(httpClient.send(request.asHttpRequest(), ofString()).body());
+            return responseFactory.parseHttpResponse(httpClient.send(request.asHttpRequest(), ofString()));
         } catch (Exception exception) {
             return BitvavoResponse.error(exception);
         }
+    }
+
+    private void verifyActionCanBeExecuted(long actionWeight) {
+        configuration.getRateLimiter().verifyActionCanBeExecuted(actionWeight);
     }
 
     private URIBuilder createURI(String apiPath) {

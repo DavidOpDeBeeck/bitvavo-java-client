@@ -1,5 +1,6 @@
 package be.davidopdebeeck.bitvavo.client;
 
+import be.davidopdebeeck.bitvavo.client.ratelimiter.BitvavoRateLimiter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static be.davidopdebeeck.bitvavo.client.serialization.BitvavoSerializationModule.bitvavoObjectMapper;
@@ -13,6 +14,7 @@ public class BitvavoClientConfiguration {
     private final String wsUrl;
     private final int accessWindow;
     private final ObjectMapper objectMapper;
+    private final BitvavoRateLimiter rateLimiter;
 
     public BitvavoClientConfiguration(Builder builder) {
         this.apiKey = requireNonNull(builder.apiKey);
@@ -21,6 +23,7 @@ public class BitvavoClientConfiguration {
         this.wsUrl = requireNonNull(builder.wsUrl);
         this.accessWindow = requireNonNull(builder.accessWindow);
         this.objectMapper = bitvavoObjectMapper();
+        this.rateLimiter = new BitvavoRateLimiter();
     }
 
     public String getApiKey() {
@@ -45,6 +48,10 @@ public class BitvavoClientConfiguration {
 
     public ObjectMapper getObjectMapper() {
         return objectMapper;
+    }
+
+    public BitvavoRateLimiter getRateLimiter() {
+        return rateLimiter;
     }
 
     public static final class Builder {

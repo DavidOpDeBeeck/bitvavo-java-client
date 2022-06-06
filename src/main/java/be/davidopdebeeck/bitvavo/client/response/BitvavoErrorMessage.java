@@ -5,6 +5,7 @@ import static org.apache.commons.lang.exception.ExceptionUtils.getStackTrace;
 
 public class BitvavoErrorMessage {
 
+    private static final String RATE_LIMIT_ERROR_CODE = "105";
     private static final String CLIENT_EXCEPTION_ERROR_CODE = "CLIENT_EXCEPTION";
 
     public static BitvavoErrorMessage fromException(Throwable throwable) {
@@ -28,6 +29,10 @@ public class BitvavoErrorMessage {
 
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    public boolean isRateLimitRelated() {
+        return errorCode.equals(RATE_LIMIT_ERROR_CODE);
     }
 
     @Override

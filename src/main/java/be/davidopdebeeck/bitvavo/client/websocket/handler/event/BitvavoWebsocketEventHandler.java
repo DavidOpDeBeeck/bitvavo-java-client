@@ -2,22 +2,19 @@ package be.davidopdebeeck.bitvavo.client.websocket.handler.event;
 
 import be.davidopdebeeck.bitvavo.client.response.BitvavoResponseHandler;
 import be.davidopdebeeck.bitvavo.client.response.BitvavoResponseParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static java.util.Objects.requireNonNull;
 
 public class BitvavoWebsocketEventHandler<T> {
 
     private final boolean oneTimeUse;
-    private final BitvavoResponseHandler<T> responseHandler;
     private final BitvavoResponseParser<T> responseParser;
+    private final BitvavoResponseHandler<T> responseHandler;
 
     private BitvavoWebsocketEventHandler(Builder<T> builder) {
         oneTimeUse = requireNonNull(builder.oneTimeUse);
+        responseParser = requireNonNull(builder.responseParser);
         responseHandler = requireNonNull(builder.responseHandler);
-        responseParser = new BitvavoResponseParser.Builder<>(builder.responseClass)
-            .withObjectMapper(builder.objectMapper)
-            .build();
     }
 
     public void handle(String responseAsString) {
@@ -30,22 +27,17 @@ public class BitvavoWebsocketEventHandler<T> {
 
     public static final class Builder<T> {
 
-        private final Class<T> responseClass;
         private Boolean oneTimeUse;
-        private ObjectMapper objectMapper;
+        private BitvavoResponseParser<T> responseParser;
         private BitvavoResponseHandler<T> responseHandler;
-
-        public Builder(Class<T> responseClass) {
-            this.responseClass = responseClass;
-        }
 
         public Builder<T> withOneTimeUse(boolean oneTimeUse) {
             this.oneTimeUse = oneTimeUse;
             return this;
         }
 
-        public Builder<T> withObjectMapper(ObjectMapper objectMapper) {
-            this.objectMapper = objectMapper;
+        public Builder<T> withResponseParser(BitvavoResponseParser<T> responseParser) {
+            this.responseParser = responseParser;
             return this;
         }
 

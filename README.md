@@ -4,15 +4,17 @@ This a java client for the API that Bitvavo provides. Bitvavo also provides an A
 find [here](https://github.com/bitvavo/java-bitvavo-api), but this client provides specific request and response classes
 to enhance the developer experience.
 
-### BitvavoClient 
+### BitvavoClient
 
-The main entrypoint of this library is the `BitvavoClient` class. This class contains no logic, but simple creates the underlying `BitvavoHttpClient` and `BitvavoWebsocketClient` clients needed to call the API. 
-If you only need the `BitvavoHttpClient` or the `BitvavoWebsocketClient` you can simply create those clients individually.  
+The main entrypoint of this library is the `BitvavoClient` class. This class contains no logic, but simple creates the
+underlying `BitvavoHttpClient` and `BitvavoWebsocketClient` clients needed to call the API. If you only need
+the `BitvavoHttpClient` or the `BitvavoWebsocketClient` you can simply create those clients individually.
 
-The `BitvavoClientConfiguration` class is used to configure the different clients. You can create an `apiKey` and `apiSecret` on the [Bitvavo website](https://account.bitvavo.com/user/api).
+The `BitvavoClientConfiguration` class is used to configure the different clients. You can create an `apiKey`
+and `apiSecret` on the [Bitvavo website](https://account.bitvavo.com/user/api).
 
 ```java
-BitvavoClientConfiguration configuration = new BitvavoClientConfiguration.Builder()
+BitvavoClientConfiguration configuration=new BitvavoClientConfiguration.Builder()
     .withApiKey("<apiKey>")
     .withApiSecret("<apiSecret>")
     .withRestUrl("https://api.bitvavo.com/v2/")
@@ -21,51 +23,54 @@ BitvavoClientConfiguration configuration = new BitvavoClientConfiguration.Builde
     .build();
 
 
-BitvavoClient client = new BitvavoClient(configuration);
-BitvavoHttpClient httpClient = client.httpClient();
-BitvavoWebsocketClient websocketClient = client.websocketClient();
+    BitvavoClient client=new BitvavoClient(configuration);
+    BitvavoHttpClient httpClient=client.httpClient();
+    BitvavoWebsocketClient websocketClient=client.websocketClient();
 ```
 
 ### BitvavoResponse
 
-The response of an API call is always wrapped in a `BitvavoResponse` class. This class contains a result or an error message if something went wrong.
-This also ensures that you "the developer" take into account that an API call can fail and if it fails what should happen.
+The response of an API call is always wrapped in a `BitvavoResponse` class. This class contains a result or an error
+message if something went wrong. This also ensures that you "the developer" take into account that an API call can fail
+and if it fails what should happen.
 
 **Successful Response**
-```java
-BitvavoResponse<String> successfulResponse = BitvavoResponse.ok("RESULT");
 
-System.out.println(successfulResponse.getOrThrow());
+```java
+BitvavoResponse<String> successfulResponse=BitvavoResponse.ok("RESULT");
+
+    System.out.println(successfulResponse.getOrThrow());
 // RESULT
-System.out.println(successfulResponse.map((result) -> "SUCCESSFUL_" + result).getOrThrow());
+    System.out.println(successfulResponse.map((result)->"SUCCESSFUL_"+result).getOrThrow());
 // SUCCESSFUL_RESULT
-System.out.println(successfulResponse.orElse(() -> "FAILED_RESULT"));
+    System.out.println(successfulResponse.orElse(()->"FAILED_RESULT"));
 // RESULT
-System.out.println(successfulResponse.orElse((error) -> error.getErrorMessage()));
+    System.out.println(successfulResponse.orElse((error)->error.getErrorMessage()));
 // RESULT
-successfulResponse.handle(result -> System.out.println(result));
+    successfulResponse.handle(result->System.out.println(result));
 // RESULT
-successfulResponse.handle(result -> System.out.println(result), error -> System.out.println(error));
+    successfulResponse.handle(result->System.out.println(result),error->System.out.println(error));
 // RESULT
 ```
 
 **Failed Response**
+
 ```java
-BitvavoResponse<String> failedResponse = BitvavoResponse.error(new BitvavoErrorMessage.Builder()
+BitvavoResponse<String> failedResponse=BitvavoResponse.error(new BitvavoErrorMessage.Builder()
     .withErrorCode("101")
     .withErrorMessage("Something went wrong!")
     .build());
 
-System.out.println(failedResponse.getOrThrow());
+    System.out.println(failedResponse.getOrThrow());
 // Exception in thread "main" java.util.NoSuchElementException: No value present, but there was an error: (101: Something went wrong!)
 //	 at be.davidopdebeeck.bitvavo.client.response.BitvavoResponse.getOrThrow(BitvavoResponse.java:85)
-System.out.println(failedResponse.orElse(() -> "FAILED_RESULT"));
+    System.out.println(failedResponse.orElse(()->"FAILED_RESULT"));
 // FAILED_RESULT
-System.out.println(failedResponse.orElse((error) -> error.getErrorMessage()));
+    System.out.println(failedResponse.orElse((error)->error.getErrorMessage()));
 // Something went wrong!
-failedResponse.handle(result -> System.out.println(result));
+    failedResponse.handle(result->System.out.println(result));
 // 
-failedResponse.handle(result -> System.out.println(result), error -> System.out.println(error));
+    failedResponse.handle(result->System.out.println(result),error->System.out.println(error));
 // 101: Something went wrong!
 ```
 
@@ -74,9 +79,9 @@ failedResponse.handle(result -> System.out.println(result), error -> System.out.
 * [x] Implement all endpoints
     * [x] for the BitvavoHttpClient
     * [x] for the BitvavoWebsocketClient
-* [ ] Implement rate limiting
-    * [ ] for the BitvavoHttpClient
-    * [ ] for the BitvavoWebsocketClient
+* [x] Implement rate limiting
+    * [x] for the BitvavoHttpClient
+    * [x] for the BitvavoWebsocketClient
 * [ ] Add examples for endpoints
     * [ ] for the BitvavoHttpClient
     * [ ] for the BitvavoWebsocketClient

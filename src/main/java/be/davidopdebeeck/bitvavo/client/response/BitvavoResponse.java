@@ -52,10 +52,18 @@ public class BitvavoResponse<T> {
         return ok(mapper.apply(value));
     }
 
-    public void handle(Consumer<T> resultConsumer) {
+    public BitvavoResponse<T> onResult(Consumer<T> resultConsumer) {
         if (isOk()) {
             resultConsumer.accept(value);
         }
+        return this;
+    }
+
+    public BitvavoResponse<T> onError(Consumer<BitvavoErrorMessage> errorMessageConsumer) {
+        if (hasErrors()) {
+            errorMessageConsumer.accept(errorMessage);
+        }
+        return this;
     }
 
     public void handle(Consumer<T> resultConsumer, Consumer<BitvavoErrorMessage> errorMessageConsumer) {
