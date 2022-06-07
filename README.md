@@ -39,17 +39,19 @@ and if it fails what should happen.
 ```java
 BitvavoResponse<String> successfulResponse=BitvavoResponse.ok("RESULT");
 
-    System.out.println(successfulResponse.getOrThrow());
+System.out.println(successfulResponse.getOrThrow());
 // RESULT
-    System.out.println(successfulResponse.map((result)->"SUCCESSFUL_"+result).getOrThrow());
+System.out.println(successfulResponse.map((result)->"SUCCESSFUL_"+result).getOrThrow());
 // SUCCESSFUL_RESULT
-    System.out.println(successfulResponse.orElse(()->"FAILED_RESULT"));
+System.out.println(successfulResponse.orElse(()->"FAILED_RESULT"));
 // RESULT
-    System.out.println(successfulResponse.orElse((error)->error.getErrorMessage()));
+System.out.println(successfulResponse.orElse((error)->error.getErrorMessage()));
 // RESULT
-    successfulResponse.handle(result->System.out.println(result));
+successfulResponse.onResult(result->System.out.println(result));
 // RESULT
-    successfulResponse.handle(result->System.out.println(result),error->System.out.println(error));
+successfulResponse.onError(error->System.out.println(error));
+// 
+successfulResponse.handle(result->System.out.println(result),error->System.out.println(error));
 // RESULT
 ```
 
@@ -61,16 +63,18 @@ BitvavoResponse<String> failedResponse=BitvavoResponse.error(new BitvavoErrorMes
     .withErrorMessage("Something went wrong!")
     .build());
 
-    System.out.println(failedResponse.getOrThrow());
+System.out.println(failedResponse.getOrThrow());
 // Exception in thread "main" java.util.NoSuchElementException: No value present, but there was an error: (101: Something went wrong!)
 //	 at be.davidopdebeeck.bitvavo.client.response.BitvavoResponse.getOrThrow(BitvavoResponse.java:85)
-    System.out.println(failedResponse.orElse(()->"FAILED_RESULT"));
+System.out.println(failedResponse.orElse(()->"FAILED_RESULT"));
 // FAILED_RESULT
-    System.out.println(failedResponse.orElse((error)->error.getErrorMessage()));
+System.out.println(failedResponse.orElse((error)->error.getErrorMessage()));
 // Something went wrong!
-    failedResponse.handle(result->System.out.println(result));
+failedResponse.onResult(result->System.out.println(result));
 // 
-    failedResponse.handle(result->System.out.println(result),error->System.out.println(error));
+failedResponse.onError(error->System.out.println(error));
+// 101: Something went wrong!
+failedResponse.handle(result->System.out.println(result),error->System.out.println(error));
 // 101: Something went wrong!
 ```
 
