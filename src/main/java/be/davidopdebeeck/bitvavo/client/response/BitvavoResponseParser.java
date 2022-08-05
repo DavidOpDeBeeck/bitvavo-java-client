@@ -5,9 +5,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.net.http.HttpHeaders;
-import java.net.http.HttpResponse;
-
 import static be.davidopdebeeck.bitvavo.client.response.BitvavoErrorMessage.fromException;
 import static be.davidopdebeeck.bitvavo.client.response.BitvavoResponse.error;
 import static java.util.Objects.requireNonNull;
@@ -24,24 +21,14 @@ public class BitvavoResponseParser<T> {
         this.rateLimiter = requireNonNull(builder.rateLimiter);
     }
 
-    public BitvavoResponse<T> parseHttpResponse(HttpResponse<String> httpResponse) {
-        updateRateLimiter(httpResponse);
-        return parseResponse(httpResponse.body());
-    }
-
-    public BitvavoResponse<T> parseResponse(String responseAsString) {
+    public BitvavoResponse<T> parseResponse(String responseAsString, BitvavoResponseMetadata metadata) {
         try {
-            return objectMapper.<BitvavoResponse<T>>readValue(responseAsString, responseType)
-                .onError(rateLimiter::handlePossibleRateLimitError);
+            BitvavoResponse<T> response = objectMapper.readValue(responseAsString, responseType);
+            rateLimiter.handleResponse(response, metadata);
+            return response;
         } catch (JsonProcessingException exception) {
             return error(fromException(exception));
         }
-    }
-
-    private void updateRateLimiter(HttpResponse<String> httpResponse) {
-        HttpHeaders headers = httpResponse.headers();
-        headers.firstValueAsLong("Bitvavo-Ratelimit-ResetAt").ifPresent(rateLimiter::updateResetAt);
-        headers.firstValueAsLong("Bitvavo-Ratelimit-Remaining").ifPresent(rateLimiter::updateWeightRemaining);
     }
 
     private JavaType createResponseType(Builder<T> builder) {

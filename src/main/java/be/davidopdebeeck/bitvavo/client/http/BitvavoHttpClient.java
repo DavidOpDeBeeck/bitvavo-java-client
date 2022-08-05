@@ -53,8 +53,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.net.URI;
 import java.net.http.HttpClient;
+import java.net.http.HttpResponse;
 import java.util.Map;
 
+import static be.davidopdebeeck.bitvavo.client.response.BitvavoResponseMetadata.metadata;
 import static java.net.http.HttpClient.newHttpClient;
 import static java.net.http.HttpResponse.BodyHandlers.ofString;
 import static java.util.Objects.requireNonNull;
@@ -482,7 +484,8 @@ public class BitvavoHttpClient {
                 .withRateLimiter(configuration.getRateLimiter())
                 .build();
 
-            return responseFactory.parseHttpResponse(httpClient.send(request.asHttpRequest(), ofString()));
+            HttpResponse<String> httpResponse = httpClient.send(request.asHttpRequest(), ofString());
+            return responseFactory.parseResponse(httpResponse.body(), metadata(httpResponse.headers()));
         } catch (Exception exception) {
             return BitvavoResponse.error(exception);
         }

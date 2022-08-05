@@ -3,6 +3,7 @@ package be.davidopdebeeck.bitvavo.client.websocket.handler.event;
 import be.davidopdebeeck.bitvavo.client.response.BitvavoResponseHandler;
 import be.davidopdebeeck.bitvavo.client.response.BitvavoResponseParser;
 
+import static be.davidopdebeeck.bitvavo.client.response.BitvavoResponseMetadata.emptyMetadata;
 import static java.util.Objects.requireNonNull;
 
 public class BitvavoWebsocketEventHandler<T> {
@@ -18,7 +19,7 @@ public class BitvavoWebsocketEventHandler<T> {
     }
 
     public void handle(String responseAsString) {
-        responseHandler.handle(responseParser.parseResponse(responseAsString));
+        responseHandler.handle(responseParser.parseResponse(responseAsString, emptyMetadata()));
     }
 
     public boolean isOneTimeUse() {
