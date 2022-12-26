@@ -14,7 +14,7 @@ The `BitvavoClientConfiguration` class is used to configure the different client
 and `apiSecret` on the [Bitvavo website](https://account.bitvavo.com/user/api).
 
 ```java
-BitvavoClientConfiguration configuration=new BitvavoClientConfiguration.Builder()
+BitvavoClientConfiguration configuration = new BitvavoClientConfiguration.Builder()
     .withApiKey("<apiKey>")
     .withApiSecret("<apiSecret>")
     .withRestUrl("https://api.bitvavo.com/v2/")
@@ -23,9 +23,9 @@ BitvavoClientConfiguration configuration=new BitvavoClientConfiguration.Builder(
     .build();
 
 
-    BitvavoClient client=new BitvavoClient(configuration);
-    BitvavoHttpClient httpClient=client.httpClient();
-    BitvavoWebsocketClient websocketClient=client.websocketClient();
+BitvavoClient client = new BitvavoClient(configuration);
+BitvavoHttpClient httpClient = client.httpClient();
+BitvavoWebsocketClient websocketClient = client.websocketClient();
 ```
 
 ### BitvavoResponse
@@ -37,28 +37,28 @@ and if it fails what should happen.
 **Successful Response**
 
 ```java
-BitvavoResponse<String> successfulResponse=BitvavoResponse.ok("RESULT");
+BitvavoResponse<String> successfulResponse = BitvavoResponse.ok("RESULT");
 
 System.out.println(successfulResponse.getOrThrow());
 // RESULT
-System.out.println(successfulResponse.map((result)->"SUCCESSFUL_"+result).getOrThrow());
+System.out.println(successfulResponse.map((result) -> "SUCCESSFUL_"+result).getOrThrow());
 // SUCCESSFUL_RESULT
-System.out.println(successfulResponse.orElse(()->"FAILED_RESULT"));
+System.out.println(successfulResponse.orElse(() -> "FAILED_RESULT"));
 // RESULT
-System.out.println(successfulResponse.orElse((error)->error.getErrorMessage()));
+System.out.println(successfulResponse.orElse((error) -> error.getErrorMessage()));
 // RESULT
-successfulResponse.onResult(result->System.out.println(result));
+successfulResponse.onResult(result -> System.out.println(result));
 // RESULT
-successfulResponse.onError(error->System.out.println(error));
+successfulResponse.onError(error -> System.out.println(error));
 // 
-successfulResponse.handle(result->System.out.println(result),error->System.out.println(error));
+successfulResponse.handle(result -> System.out.println(result), error -> System.out.println(error));
 // RESULT
 ```
 
 **Failed Response**
 
 ```java
-BitvavoResponse<String> failedResponse=BitvavoResponse.error(new BitvavoErrorMessage.Builder()
+BitvavoResponse<String> failedResponse = BitvavoResponse.error(new BitvavoErrorMessage.Builder()
     .withErrorCode("101")
     .withErrorMessage("Something went wrong!")
     .build());
@@ -66,15 +66,15 @@ BitvavoResponse<String> failedResponse=BitvavoResponse.error(new BitvavoErrorMes
 System.out.println(failedResponse.getOrThrow());
 // Exception in thread "main" java.util.NoSuchElementException: No value present, but there was an error: (101: Something went wrong!)
 //	 at be.davidopdebeeck.bitvavo.client.response.BitvavoResponse.getOrThrow(BitvavoResponse.java:85)
-System.out.println(failedResponse.orElse(()->"FAILED_RESULT"));
+System.out.println(failedResponse.orElse(() -> "FAILED_RESULT"));
 // FAILED_RESULT
-System.out.println(failedResponse.orElse((error)->error.getErrorMessage()));
+System.out.println(failedResponse.orElse((error) -> error.getErrorMessage()));
 // Something went wrong!
-failedResponse.onResult(result->System.out.println(result));
+failedResponse.onResult(result -> System.out.println(result));
 // 
-failedResponse.onError(error->System.out.println(error));
+failedResponse.onError(error -> System.out.println(error));
 // 101: Something went wrong!
-failedResponse.handle(result->System.out.println(result),error->System.out.println(error));
+failedResponse.handle(result -> System.out.println(result), error -> System.out.println(error));
 // 101: Something went wrong!
 ```
 
