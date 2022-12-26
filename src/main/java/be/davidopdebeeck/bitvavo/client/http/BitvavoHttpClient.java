@@ -336,24 +336,24 @@ public class BitvavoHttpClient {
         return doRequest(createGETRequest(uri), BitvavoBalanceResponse[].class);
     }
 
-    public BitvavoResponse<BitvavoBalanceResponse> balance(BitvavoBalanceRequest request) {
+    public BitvavoResponse<BitvavoBalanceResponse[]> balance(BitvavoBalanceRequest request) {
         verifyActionCanBeExecuted(5);
 
         URI uri = createURI("/balance")
             .withQueryParameters(convertToMap(request))
             .build();
 
-        return doRequest(createGETRequest(uri), BitvavoBalanceResponse.class);
+        return doRequest(createGETRequest(uri), BitvavoBalanceResponse[].class);
     }
 
-    public BitvavoResponse<BitvavoDepositResponse> deposit(BitvavoDepositRequest request) {
+    public BitvavoResponse<BitvavoDepositResponse[]> deposit(BitvavoDepositRequest request) {
         verifyActionCanBeExecuted(1);
 
         URI uri = createURI("/deposit")
             .withQueryParameters(convertToMap(request))
             .build();
 
-        return doRequest(createGETRequest(uri), BitvavoDepositResponse.class);
+        return doRequest(createGETRequest(uri), BitvavoDepositResponse[].class);
     }
 
     public BitvavoResponse<BitvavoBankDepositResponse> bankDeposit(BitvavoDepositRequest request) {
