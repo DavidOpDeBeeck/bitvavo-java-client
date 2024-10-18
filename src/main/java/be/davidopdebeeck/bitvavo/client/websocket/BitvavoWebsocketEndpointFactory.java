@@ -1,9 +1,9 @@
 package be.davidopdebeeck.bitvavo.client.websocket;
 
 import be.davidopdebeeck.bitvavo.client.BitvavoClientConfiguration;
+import jakarta.websocket.ContainerProvider;
+import jakarta.websocket.WebSocketContainer;
 
-import javax.websocket.ContainerProvider;
-import javax.websocket.WebSocketContainer;
 import java.net.URI;
 
 import static be.davidopdebeeck.bitvavo.client.utils.RetryUtils.retry;

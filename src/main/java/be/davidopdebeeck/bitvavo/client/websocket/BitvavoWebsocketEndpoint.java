@@ -9,10 +9,13 @@ import be.davidopdebeeck.bitvavo.client.websocket.handler.error.BitvavoWebsocket
 import be.davidopdebeeck.bitvavo.client.websocket.handler.event.BitvavoWebsocketEventHandler;
 import be.davidopdebeeck.bitvavo.client.websocket.handler.event.BitvavoWebsocketEventHandlerRegistry;
 import be.davidopdebeeck.bitvavo.client.websocket.request.BitvavoWebsocketRequest;
+import jakarta.websocket.ClientEndpoint;
+import jakarta.websocket.OnError;
+import jakarta.websocket.OnMessage;
+import jakarta.websocket.OnOpen;
+import jakarta.websocket.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.websocket.*;
 
 import static be.davidopdebeeck.bitvavo.client.response.BitvavoErrorMessage.fromException;
 import static be.davidopdebeeck.bitvavo.client.utils.RetryUtils.retryUntilTrue;
@@ -114,6 +117,6 @@ public class BitvavoWebsocketEndpoint {
     }
 
     private void verifySessionIsAuthentication(String action) {
-        retryUntilTrue(() -> this.authenticated || "authenticate".equals(action), "Waiting for session to be authenticated.");
+        retryUntilTrue(() -> this.authenticated || AUTHENTICATE.equals(action), "Waiting for session to be authenticated.");
     }
 }
