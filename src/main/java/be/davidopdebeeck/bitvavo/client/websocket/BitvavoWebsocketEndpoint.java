@@ -3,6 +3,7 @@ package be.davidopdebeeck.bitvavo.client.websocket;
 import be.davidopdebeeck.bitvavo.client.BitvavoClientConfiguration;
 import be.davidopdebeeck.bitvavo.client.api.authenticate.BitvavoAuthenticateRequest;
 import be.davidopdebeeck.bitvavo.client.api.authenticate.BitvavoAuthenticateResponse;
+import be.davidopdebeeck.bitvavo.client.response.BitvavoResponse;
 import be.davidopdebeeck.bitvavo.client.response.BitvavoResponseParser;
 import be.davidopdebeeck.bitvavo.client.websocket.handler.error.BitvavoWebsocketErrorHandler;
 import be.davidopdebeeck.bitvavo.client.websocket.handler.error.BitvavoWebsocketErrorHandlerRegistry;
@@ -97,9 +98,10 @@ public class BitvavoWebsocketEndpoint {
 
         registerHandler(AUTHENTICATE, new BitvavoWebsocketEventHandler.Builder<BitvavoAuthenticateResponse>()
             .withOneTimeUse(true)
-            .withResponseHandler(response -> authenticated = response
-                .map(BitvavoAuthenticateResponse::isAuthenticated)
-                .orElse(error -> false))
+            .withResponseHandler(response -> authenticated = switch (response) {
+                case BitvavoResponse.Ok(var value) -> value.isAuthenticated();
+                case BitvavoResponse.Error(var ignored) -> false;
+            })
             .withResponseParser(new BitvavoResponseParser.Builder<>(BitvavoAuthenticateResponse.class)
                 .withRateLimiter(configuration.getRateLimiter())
                 .withObjectMapper(configuration.getObjectMapper())

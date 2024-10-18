@@ -47,12 +47,16 @@ public class BitvavoServerSideRateLimiter implements BitvavoRateLimiter {
     @Override
     public void handleResponse(BitvavoResponse<?> response, BitvavoResponseMetadata metadata) {
         metadata.findValues("Bitvavo-Ratelimit-ResetAt", String.class)
-            .map(values -> parseLong(values.get(0)))
+            .map(values -> parseLong(values.getFirst()))
             .ifPresent(this::updateResetAt);
         metadata.findValues("Bitvavo-Ratelimit-Remaining", String.class)
-            .map(values -> parseLong(values.get(0)))
+            .map(values -> parseLong(values.getFirst()))
             .ifPresent(this::updateWeightRemaining);
-        response.onError(this::handlePossibleRateLimitError);
+
+        switch (response) {
+            case BitvavoResponse.Ok(var ignored) -> {}
+            case BitvavoResponse.Error(var errorMessage) -> handlePossibleRateLimitError(errorMessage);
+        }
     }
 
     private void handlePossibleRateLimitError(BitvavoErrorMessage errorMessage) {

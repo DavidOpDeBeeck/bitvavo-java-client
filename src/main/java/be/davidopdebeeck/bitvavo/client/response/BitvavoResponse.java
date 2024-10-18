@@ -2,100 +2,52 @@ package be.davidopdebeeck.bitvavo.client.response;
 
 
 import java.util.NoSuchElementException;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static be.davidopdebeeck.bitvavo.client.response.BitvavoErrorMessage.fromException;
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
-public class BitvavoResponse<T> {
+public sealed interface BitvavoResponse<T> {
 
-    public static <T> BitvavoResponse<T> ok(T value) {
-        return new BitvavoResponse<>(value);
+    static <T> BitvavoResponse<T> ok(T value) {
+        return new Ok<>(value);
     }
 
-    public static <T> BitvavoResponse<T> error(Exception exception) {
-        return new BitvavoResponse<>(fromException(exception));
+    static <T> BitvavoResponse<T> error(Exception exception) {
+        return new Error<>(fromException(exception));
     }
 
-    public static <T> BitvavoResponse<T> error(BitvavoErrorMessage errorMessage) {
-        return new BitvavoResponse<>(errorMessage);
+    static <T> BitvavoResponse<T> error(BitvavoErrorMessage errorMessage) {
+        return new Error<>(errorMessage);
     }
 
-    private final T value;
-    private final BitvavoErrorMessage errorMessage;
+    <U> BitvavoResponse<U> map(Function<T, U> mapper);
 
-    private BitvavoResponse(T value) {
-        this.value = requireNonNull(value);
-        this.errorMessage = null;
+    T getOrThrow();
+
+    record Ok<T>(T value) implements BitvavoResponse<T> {
+        @Override
+        public <U> BitvavoResponse<U> map(Function<T, U> mapper) {
+            requireNonNull(mapper);
+            return ok(mapper.apply(value));
+        }
+
+        @Override
+        public T getOrThrow() {
+            return value;
+        }
     }
 
-    private BitvavoResponse(BitvavoErrorMessage errorMessage) {
-        this.value = null;
-        this.errorMessage = requireNonNull(errorMessage);
-    }
-
-    public boolean hasErrors() {
-        return errorMessage != null;
-    }
-
-    public boolean isOk() {
-        return value != null;
-    }
-
-    public <U> BitvavoResponse<U> map(Function<T, U> mapper) {
-        if (hasErrors()) {
+    record Error<T>(BitvavoErrorMessage errorMessage) implements BitvavoResponse<T> {
+        @Override
+        public <U> BitvavoResponse<U> map(Function<T, U> mapper) {
             return error(errorMessage);
         }
-        return ok(mapper.apply(value));
-    }
 
-    public BitvavoResponse<T> onResult(Consumer<T> resultConsumer) {
-        if (isOk()) {
-            resultConsumer.accept(value);
-        }
-        return this;
-    }
-
-    public BitvavoResponse<T> onError(Consumer<BitvavoErrorMessage> errorMessageConsumer) {
-        if (hasErrors()) {
-            errorMessageConsumer.accept(errorMessage);
-        }
-        return this;
-    }
-
-    public void handle(Consumer<T> resultConsumer, Consumer<BitvavoErrorMessage> errorMessageConsumer) {
-        if (isOk()) {
-            resultConsumer.accept(value);
-            return;
-        }
-        errorMessageConsumer.accept(errorMessage);
-    }
-
-    public T orElse(Supplier<T> function) {
-        if (hasErrors()) {
-            return function.get();
-        }
-        return value;
-    }
-
-    public T orElse(Function<BitvavoErrorMessage, T> function) {
-        if (hasErrors()) {
-            return function.apply(errorMessage);
-        }
-        return value;
-    }
-
-    public T getOrThrow() {
-        if (hasErrors()) {
+        @Override
+        public T getOrThrow() {
             throw new NoSuchElementException(format("No value present, but there was an error: (%s)", errorMessage));
         }
-        return value;
-    }
-
-    public BitvavoErrorMessage getErrorMessage() {
-        return errorMessage;
     }
 }

@@ -37,45 +37,45 @@ and if it fails what should happen.
 **Successful Response**
 
 ```java
-BitvavoResponse<String> successfulResponse = BitvavoResponse.ok("RESULT");
+public class Test {
 
-System.out.println(successfulResponse.getOrThrow());
-// RESULT
-System.out.println(successfulResponse.map((result) -> "SUCCESSFUL_"+result).getOrThrow());
-// SUCCESSFUL_RESULT
-System.out.println(successfulResponse.orElse(() -> "FAILED_RESULT"));
-// RESULT
-System.out.println(successfulResponse.orElse((error) -> error.getErrorMessage()));
-// RESULT
-successfulResponse.onResult(result -> System.out.println(result));
-// RESULT
-successfulResponse.onError(error -> System.out.println(error));
-// 
-successfulResponse.handle(result -> System.out.println(result), error -> System.out.println(error));
-// RESULT
+  public static void main(String[] args) {
+    BitvavoResponse<String> okResponse = BitvavoResponse.ok("RESULT");
+
+    System.out.println(okResponse.getOrThrow());
+    // RESULT
+    System.out.println(okResponse.map((result) -> "SUCCESSFUL_" + result).getOrThrow());
+    // SUCCESSFUL_RESULT
+    switch (okResponse) {
+      case BitvavoResponse.Ok(var value) -> System.out.println(value);
+      case BitvavoResponse.Error(var errorMessage) -> System.out.println(errorMessage);
+    }
+    // RESULT
+  }
+}
 ```
 
 **Failed Response**
 
 ```java
-BitvavoResponse<String> failedResponse = BitvavoResponse.error(new BitvavoErrorMessage.Builder()
-    .withErrorCode("101")
-    .withErrorMessage("Something went wrong!")
-    .build());
+public class Test {
 
-System.out.println(failedResponse.getOrThrow());
-// Exception in thread "main" java.util.NoSuchElementException: No value present, but there was an error: (101: Something went wrong!)
-//	 at be.davidopdebeeck.bitvavo.client.response.BitvavoResponse.getOrThrow(BitvavoResponse.java:85)
-System.out.println(failedResponse.orElse(() -> "FAILED_RESULT"));
-// FAILED_RESULT
-System.out.println(failedResponse.orElse((error) -> error.getErrorMessage()));
-// Something went wrong!
-failedResponse.onResult(result -> System.out.println(result));
-// 
-failedResponse.onError(error -> System.out.println(error));
-// 101: Something went wrong!
-failedResponse.handle(result -> System.out.println(result), error -> System.out.println(error));
-// 101: Something went wrong!
+  public static void main(String[] args) {
+    BitvavoResponse<String> errorResponse = BitvavoResponse.error(new BitvavoErrorMessage.Builder()
+            .withErrorCode("101")
+            .withErrorMessage("Something went wrong!")
+            .build());
+
+    System.out.println(errorResponse.getOrThrow());
+    // Exception in thread "main" java.util.NoSuchElementException: No value present, but there was an error: (101: Something went wrong!)
+    //	 at be.davidopdebeeck.bitvavo.client.response.BitvavoResponse$Error.getOrThrow(BitvavoResponse.java:50)
+    switch (errorResponse) {
+      case BitvavoResponse.Ok(var value) -> System.out.println(value);
+      case BitvavoResponse.Error(var errorMessage) -> System.out.println(errorMessage);
+    }
+    // 101: Something went wrong!
+  }
+}
 ```
 
 ### TODOs
