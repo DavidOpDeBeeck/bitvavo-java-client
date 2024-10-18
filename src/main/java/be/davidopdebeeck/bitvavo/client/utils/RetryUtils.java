@@ -25,7 +25,7 @@ public class RetryUtils {
         boolean result = supplier.get();
         if (!result) {
             int waitTimeInMillis = calculateWaitTimeInMillis(tries);
-            LOGGER.warn(message + " Trying again in " + waitTimeInMillis + " milliseconds ...");
+            LOGGER.warn("{} Trying again in {} milliseconds ...", message, waitTimeInMillis);
             waitForMillis(waitTimeInMillis);
             retryUntilTrue(supplier, message, ++tries);
         }
@@ -40,7 +40,7 @@ public class RetryUtils {
             return supplier.get();
         } catch (Throwable exception) {
             int waitTimeInMillis = calculateWaitTimeInMillis(tries);
-            LOGGER.warn(message + " Trying again in " + waitTimeInMillis + " milliseconds ...", exception);
+            LOGGER.warn("{} Trying again in {} milliseconds ...", message, waitTimeInMillis, exception);
             waitForMillis(waitTimeInMillis);
             return retry(supplier, message, ++tries);
         }
