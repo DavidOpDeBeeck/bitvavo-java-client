@@ -26,6 +26,8 @@ public sealed interface BitvavoResponse<T> {
 
     T getOrThrow();
 
+    T orElse(Function<BitvavoErrorMessage, T> function);
+
     record Ok<T>(T value) implements BitvavoResponse<T> {
         @Override
         public <U> BitvavoResponse<U> map(Function<T, U> mapper) {
@@ -35,6 +37,11 @@ public sealed interface BitvavoResponse<T> {
 
         @Override
         public T getOrThrow() {
+            return value;
+        }
+
+        @Override
+        public T orElse(Function<BitvavoErrorMessage, T> function) {
             return value;
         }
     }
@@ -48,6 +55,11 @@ public sealed interface BitvavoResponse<T> {
         @Override
         public T getOrThrow() {
             throw new NoSuchElementException(format("No value present, but there was an error: (%s)", errorMessage));
+        }
+
+        @Override
+        public T orElse(Function<BitvavoErrorMessage, T> function) {
+            return function.apply(errorMessage);
         }
     }
 }
